@@ -36,7 +36,7 @@ function setup() {
     }
 
     // Numbers from 0-15
-    for (let i = 0; i <= 15; i++) {
+    for (let i = 1; i <= 15; i++) {
         push();
         fill(test.fill);
         textSize(test.size);
