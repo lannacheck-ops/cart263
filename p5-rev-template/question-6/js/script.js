@@ -56,3 +56,7 @@ function setup() {
 function draw() {
 
 }
+
+function mousePressed() {
+    console.log(frameRate());
+}
