@@ -36,9 +36,9 @@ function draw() {
     displaySquare();
     checkCollisionWithSquare();
 
+
     if (counter > 0 && counter < 11) {
-        console.log(ellipseNum);
-        while (ellipseNum <= counter) {
+        while (ellipseNum < counter) {
             fill(255, ellipseAlpha);
             ellipse(width / 2, height / 2, radius);
             ellipseAlpha += 1;
@@ -84,8 +84,10 @@ function checkCollisionWithSquare() {
  * Increases the counter each time the mouse is pressed
  */
 function mousePressed() {
+    console.log(counter);
+    //console.log(ellipseNum);
     if (box.overlap) {
-        counter += 1;
-        console.log(counter);
+        counter++;
     }
+
 }
