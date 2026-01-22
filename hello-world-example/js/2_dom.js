@@ -40,14 +40,32 @@ function setup() {
     // console.log(el)
 
     // Get parent of an element
-    let parentOfOne = document.querySelector("#one").parentElement.parentElement;
-    console.log(parentOfOne)
+    // let parentOfOne = document.querySelector("#one").parentElement.parentElement;
+    // console.log(parentOfOne)
 
-    // Get children of an element
-    let childrenOfFlex = document.querySelector(".wrapper_flex_box").children;
-    console.log(childrenOfFlex)
+    // // Get children of an element
+    // let childrenOfFlex = document.querySelector(".wrapper_flex_box").children;
+    // console.log(childrenOfFlex)
 
     // for (let i = 0; i < childrenOfFlex.length; i++) {
     //     console.log(childrenOfFlex[i])
     // }
+
+    document.querySelector("#four").textContent = "<h3> a new h3 </h3>"
+
+    console.log(document.querySelector("p span"))
+    // document.querySelector(".square_shape").classList.add("another_class_2")
+    document.querySelector(".square_shape").style.background = "rgba(200,160,0)";
+
+    //new element
+    let newDiv = document.createElement("div");
+    newDiv.classList.add("square_shape");
+    newDiv.innerHTML = " NEW ELEMENT ";
+    newDiv.style.backgroundColor = "purple";
+
+    // access parent element
+    let parentElement = document.querySelector(".wrapper_flex_box")
+    parentElement.appendChild(newDiv)
 }
+// Order of priority of styles(most prioritized to least prioritized) = style in the html, id, class
+// What do you want to access and what will you do once you access it
