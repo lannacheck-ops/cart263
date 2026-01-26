@@ -80,27 +80,36 @@ function setup() {
      and change the background color ... of first and second ...*/
     /***CODE */
     let contentClass = document.querySelectorAll(".content-container");
-    for (let i = 0; i < contentClass.length; i++) {
-        contentClass[i].style.background = "rgba(200,160,0)";
-    }
+    // for (let i = 0; i < contentClass.length; i++) {
+    //     contentClass[i].style.background = "rgba(200,160,50)";
+    // }
+    contentClass[0].style.background = "orange";
+    contentClass[1].style.background = "purple";
     /*************************************** */
     /* 3: Change the src element of the first image element on the page to be ...
     /***CODE */
-
+    let imgClass = document.querySelectorAll(".img-image");
+    console.log(imgClass[0].getAttribute("src"));
+    imgClass[0].src = "task-2-images/seven.png"
     /*************************************** */
     /* 4: Select the third paragraph element on the page and 
     replace the content (within the paragraph) to be an h2 element which contains the text `TEST 123`
     /***CODE */
-
+    let paragraphs = document.querySelectorAll("p");
+    paragraphs[2].innerHTML = "<h2> TEST 123 </h2>"
     /*************************************** */
     /* 5: Select the fourth paragraph element on the page and 
     add to the existing content an h2 element containing the text `TEST 123`
     /***CODE */
-
+    paragraphs[3].innerHTML += "<h2> TEST 123 </h2>"
     /*************************************** */
     /* 6: Select the fifth paragraph element on the page and add to the existing content 
     an img element that holds `one.png`, and add the class newStyle to said paragraph element.
     /***CODE */
+    let newImg = document.createElement("img");
+    newImg.classList.add("newStyle");
+    newImg.src = "task-2-images/one.png";
+    paragraphs[4].appendChild(newImg);
 
 
     /*************************************** */
@@ -111,6 +120,11 @@ function setup() {
     (i.e. colors[0] should be allocated to the first innerContainers element, colors[1] to the second, etc ...) 
     a background using that color.
     /***CODE */
+    let colors = ["red", "blue", "green", "orange"];
+    let innerContainers = document.querySelectorAll(".inner-container");
+    for (let i = 0; i < innerContainers.length; i++) {
+        innerContainers[i].style.background = colors[i]
+    }
 
     /*************************************** */
     /*** END PART TWO MODIFY */
