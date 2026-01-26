@@ -185,16 +185,15 @@ function setup() {
 
     /***CODE */
     let parentGrid = document.querySelector("#new-grid");
-    console.log(parentGrid);
+
     let returnedDiv = undefined
     let yPos;
     let xPos;
     for (let x = 0; x < 10; x++) {
         for (let y = 0; y < 10; y++) {
-            customNewBoxCreate(parentGrid);
+            // customNewBoxCreate(parentGrid);
             returnedDiv = customNewBoxCreate(parentGrid);
             yPos = y * 42 + "px"
-            // returnedDiv.style.position = "absolute";
             returnedDiv.style.top = yPos;
             //console.log(returnedDiv.style.top);
             xPos = x * 42 + "px"
@@ -203,8 +202,10 @@ function setup() {
         }
 
     }
-    console.log(document.querySelectorAll(".testDiv"));
 
+    let testDivs = document.querySelectorAll(".testDiv")
+    console.log(testDivs);
+    //console.log(parentGrid);
     function customNewBoxCreate(parent) {
         let newDiv = document.createElement("div");
         newDiv.classList.add("testDiv");
@@ -214,7 +215,7 @@ function setup() {
 
 
     /***EXPLANATION::
-     * 
+     *  There are 100 elements with the class name testDiv. This is because there are 10 rows and 10 columns so 10 times 10 equals 100.
      * 
      */
 
@@ -233,7 +234,31 @@ function setup() {
         when dividing by three. */
 
     /***CODE */
+    let parentGrid2 = document.querySelector("#new-grid-three");
+    let returnedDiv2 = undefined;
+    for (let x = 0; x < 10; x++) {
+        for (let y = 0; y < 10; y++) {
+            returnedDiv2 = customNewBoxCreate(parentGrid2);
+            if ((x + 1) % 3 === 0) {
+                returnedDiv2.style.background = "red";
+            }
+            else if ((x + 1) % 3 === 1) {
+                returnedDiv2.style.background = "orange";
+            }
+            else if ((x + 1) % 3 === 2) {
+                returnedDiv2.style.background = "yellow";
+            }
+            //customNewBoxCreate(parentGrid2);
 
+            yPos = y * 42 + "px"
+            returnedDiv2.style.top = yPos;
+            //console.log(returnedDiv.style.top);
+            xPos = x * 42 + "px"
+            returnedDiv2.style.left = xPos;
+            returnedDiv2.textContent = (x + 1) % 3;
+        }
+
+    }
 
     /***EXPLANATION::
      * 
