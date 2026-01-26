@@ -144,20 +144,20 @@ function setup() {
     /* 1H: Iterate through the allPTagsThree array and call customCreateElement(), 
     passing the current allPTagsThree element as the parent with each iteration.*/
     /***CODE */
-    let allPTagsThree = document.querySelectorAll("p");
-    // for (let i = 0; i < allPTagsThree.length; i++) {
-    //     customCreateElement(allPTagsThree[i]);
+    // let allPTagsThree = document.querySelectorAll("p");
+    // // for (let i = 0; i < allPTagsThree.length; i++) {
+    // //     customCreateElement(allPTagsThree[i]);
+    // // }
+    // for (let paragraphs of allPTagsThree) {
+    //     customCreateElement(paragraphs);
     // }
-    for (let paragraphs of allPTagsThree) {
-        customCreateElement(paragraphs);
-    }
-    function customCreateElement(parent) {
-        let newParagraph = document.createElement("p");
-        newParagraph.textContent = "using create Element";
-        newParagraph.style.background = "green";
-        newParagraph.style.color = "white";
-        parent.appendChild(newParagraph);
-    }
+    // function customCreateElement(parent) {
+    //     let newParagraph = document.createElement("p");
+    //     newParagraph.textContent = "using create Element";
+    //     newParagraph.style.background = "green";
+    //     newParagraph.style.color = "white";
+    //     parent.appendChild(newParagraph);
+    // }
     /***EXPLANATION::
      * The text "using create Element" appears under each paragraph element on the page. The text color is white and its background color is green
      * 
@@ -184,6 +184,33 @@ function setup() {
         otherwise lat it have the content `ODD`.*/
 
     /***CODE */
+    let parentGrid = document.querySelector("#new-grid");
+    console.log(parentGrid);
+    let returnedDiv = undefined
+    let yPos;
+    let xPos;
+    for (let x = 0; x < 10; x++) {
+        for (let y = 0; y < 10; y++) {
+            customNewBoxCreate(parentGrid);
+            returnedDiv = customNewBoxCreate(parentGrid);
+            yPos = y * 42 + "px"
+            // returnedDiv.style.position = "absolute";
+            returnedDiv.style.top = yPos;
+            //console.log(returnedDiv.style.top);
+            xPos = x * 42 + "px"
+            returnedDiv.style.left = xPos;
+            console.log(returnedDiv);
+        }
+
+    }
+    console.log(document.querySelectorAll(".testDiv"));
+
+    function customNewBoxCreate(parent) {
+        let newDiv = document.createElement("div");
+        newDiv.classList.add("testDiv");
+        parent.appendChild(newDiv);
+        return newDiv;
+    }
 
 
     /***EXPLANATION::
