@@ -70,11 +70,19 @@ function setup() {
     /*************************************** */
     /* 1: Select the first paragraph and replace the text within the paragraph... */
     /***CODE */
+    /***OUTPUT:
+     * document.querySelector("p").textContent = "Text changed by Lanna on the following date: 2026-01-26";
+     */
+    // console.log(document.querySelector("p").textContent);
+    document.querySelector("p").textContent = "Text changed by Lanna on the following date: 2026-01-26";
     /*************************************** */
     /* 2: Select all elements in the HTML that have the class name content-container
      and change the background color ... of first and second ...*/
     /***CODE */
-
+    let contentClass = document.querySelectorAll(".content-container");
+    for (let i = 0; i < contentClass.length; i++) {
+        contentClass[i].style.background = "rgba(200,160,0)";
+    }
     /*************************************** */
     /* 3: Change the src element of the first image element on the page to be ...
     /***CODE */
