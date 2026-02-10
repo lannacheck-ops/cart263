@@ -4,8 +4,8 @@ function setup_A() {
   console.log("in a");
   /**************************************************** */
   //get the buttons
-  activateButtons(`#TEAM_A`, "ani_canvA",aniA,aniB,aniC,aniD);
-  
+  activateButtons(`#TEAM_A`, "ani_canvA", aniA, aniB, aniC, aniD);
+
   /**************** ANI A ************************************ */
   /** PUT ALL YOUR CODE FOR INTERACTIVE PATTERN A INSIDE HERE */
   /**************** ANI A ************************************ */
@@ -21,6 +21,8 @@ function setup_A() {
    * remember you can define other functions inside....
    * Do not change any code above or the HTML markup.
    * **/
+
+
 
   function aniA(parentCanvas) {
     console.log("in ani-A -teamA");
@@ -44,8 +46,8 @@ function setup_A() {
    * **/
 
   function aniB(parentCanvas) {
-      console.log("in ani-B -teamA");
-    
+    console.log("in ani-B -teamA");
+
   }
   /****************ANI C ************************************ */
   /** PUT ALL YOUR CODE FOR INTERACTIVE PATTERN C INSIDE HERE */
@@ -68,7 +70,7 @@ function setup_A() {
    */
 
   function aniC(parentCanvas) {
-      console.log("in ani-C -teamA");
+    console.log("in ani-C -teamA");
 
     /*** THIS IS THE CALLBACK FOR KEY DOWN (* DO NOT CHANGE THE NAME *..) */
     windowKeyDownRef = function (e) {
@@ -102,7 +104,7 @@ function setup_A() {
    * remember you can define other functions inside....
    * Do not change any code above or the HTML markup.
    * **/
-   function aniD(parentCanvas) {
+  function aniD(parentCanvas) {
     console.log("in ani-D -teamA");
-    }
+  }
 }
