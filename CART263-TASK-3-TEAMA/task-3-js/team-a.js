@@ -156,7 +156,7 @@ function setup_A() {
     // function to create the heart
     function createHearts(offsetX, offsetY) {
       let heart = document.createElement("div");
-      heart.className = "arrow-heart";
+      heart.classList.add("arrow-heart");
       heart.textContent = "💘 ";
       heart.style.left = offsetX + "px";
       heart.style.top = offsetY + "px";
