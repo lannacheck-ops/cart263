@@ -212,3 +212,8 @@ h5 {
   background: rgb(235, 24, 101);
   position: absolute;
 }
+
+.arrow-heart {
+  position: absolute;
+  pointer-events: none;
+}
