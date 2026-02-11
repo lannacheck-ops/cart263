@@ -22,10 +22,66 @@ function setup_A() {
    * Do not change any code above or the HTML markup.
    * **/
 
-
-
   function aniA(parentCanvas) {
+    let prtclVel = 1;
+    let prtclAcc = 0;
+    let prtDir = [-1, 1];
+    let newParticle = [];
     console.log("in ani-A -teamA");
+    parentCanvas.addEventListener("click", displayParticle);
+
+    window.requestAnimationFrame(animate);
+    function animate() {
+      if (newParticle.length > 0) {
+        for (let i = 0; i < newParticle.length; i++) {
+          moveParticles(newParticle[i]);
+          // console.log(newParticle[i].style.left);
+        }
+      }
+      window.requestAnimationFrame(animate);
+    }
+    /**
+     * Triggered on Mouse Clicked
+     */
+    function displayParticle(eventObj) {
+      let canvasBounds = parentCanvas.getBoundingClientRect();
+      let x = eventObj.clientX - canvasBounds.x;
+      let y = eventObj.clientY - canvasBounds.y;
+
+      console.log(x, y);
+      let numOfParticles = Math.floor(Math.random() * 20);
+      for (let i = 0; i < numOfParticles; i++) {
+        newParticle.push(createParticles());
+        newParticle[i].style.left = `${x}px`;
+        newParticle[i].style.top = `${y}px`;
+      }
+      //console.log(newParticle);
+    }
+
+    function moveParticles(particles) {
+      const dirX = prtDir[Math.floor(Math.random() * prtDir.length)]
+      const dirY = prtDir[Math.floor(Math.random() * prtDir.length)]
+      particles.style.left = parseInt(particles.style.left) + (prtclVel * dirX) + "px";
+      particles.style.top = parseInt(particles.style.top) + (prtclVel * dirY) + "px";
+
+    }
+
+    function createParticles() {
+
+      let particleDiv = document.createElement("div")
+      particleDiv.classList.add("TEAM_A_ANI_A_particle");
+      document.querySelector("#ani_canvA_A").appendChild(particleDiv);
+      let prtcl = {
+        prtclDiv: particleDiv,
+        x: particleDiv.style.left,
+        y: particleDiv.style.top,
+        velX: 1,
+        velY: 1,
+        dirX: Math.floor(Math.random() * prtDir.length),
+        dirY: Math.floor(Math.random() * prtDir.length)
+      }
+      return particleDiv;
+    }
   }
 
 
