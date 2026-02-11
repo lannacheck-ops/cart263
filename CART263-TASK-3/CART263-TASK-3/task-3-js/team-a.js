@@ -23,10 +23,21 @@ function setup_A() {
    * **/
 
   function aniA(parentCanvas) {
-    let prtclVel = 1;
-    let prtclAcc = 0;
-    let prtDir = [-1, 1];
     let newParticle = [];
+    let dir = [1, -1];
+    let prtclNum = 0;
+    let prtclSpeed = []
+    let pinkShades = [
+      "#FFC0CB", //grey blue first
+      "#E94196",
+      "#FF69B4",
+      "#FF00FF",
+      "#F4C2C2",
+      "#F88379",
+      "#FFB7C5 ",
+      "#FF1493",
+      "#E30B5C"
+    ];
     console.log("in ani-A -teamA");
     parentCanvas.addEventListener("click", displayParticle);
 
@@ -34,10 +45,13 @@ function setup_A() {
     function animate() {
       if (newParticle.length > 0) {
         for (let i = 0; i < newParticle.length; i++) {
-          moveParticles(newParticle[i]);
+          moveParticles(newParticle[i], prtclSpeed[i]);
+          checkBounds(parentCanvas, newParticle[i], prtclSpeed[i]);
+          // console.log(newParticle[i].style.left)
           // console.log(newParticle[i].style.left);
         }
       }
+      ;
       window.requestAnimationFrame(animate);
     }
     /**
@@ -48,38 +62,50 @@ function setup_A() {
       let x = eventObj.clientX - canvasBounds.x;
       let y = eventObj.clientY - canvasBounds.y;
 
-      console.log(x, y);
-      let numOfParticles = Math.floor(Math.random() * 20);
-      for (let i = 0; i < numOfParticles; i++) {
-        newParticle.push(createParticles());
-        newParticle[i].style.left = `${x}px`;
-        newParticle[i].style.top = `${y}px`;
-      }
-      //console.log(newParticle);
+      prtclSpeed.push(createParticleSpeed());
+      newParticle.push(createParticles());
+      newParticle[prtclNum].style.left = `${x}px`;
+      newParticle[prtclNum].style.top = `${y}px`;
+      newParticle[prtclNum].style.background = `${pinkShades[Math.floor(Math.random() * pinkShades.length)]}`;
+      prtclNum++;
+      // console.log(document.querySelectorAll(".TEAM_A_ANI_A_particle"))
     }
 
-    function moveParticles(particles) {
-      const dirX = prtDir[Math.floor(Math.random() * prtDir.length)]
-      const dirY = prtDir[Math.floor(Math.random() * prtDir.length)]
-      particles.style.left = parseInt(particles.style.left) + (prtclVel * dirX) + "px";
-      particles.style.top = parseInt(particles.style.top) + (prtclVel * dirY) + "px";
+    function moveParticles(particles, s) {
+      particles.style.left = parseInt(particles.style.left) + s.speedX + "px";
+      particles.style.top = parseInt(particles.style.top) + s.speedY + "px";
 
+    }
+    function createParticleSpeed() {
+      let newSpeed = {
+        speedX: (Math.floor(Math.random() * (3 - 1)) + 1) * dir[Math.floor(Math.random() * dir.length)],
+        speedY: (Math.floor(Math.random() * (3 - 1)) + 1) * dir[Math.floor(Math.random() * dir.length)]
+      }
+      return newSpeed
+    }
+    function checkBounds(parent, p, s) {
+      let bounds = parent.getBoundingClientRect();
+      let pWidth = p.getBoundingClientRect().width;
+      let pHeight = p.getBoundingClientRect().height;
+      if (parseInt(p.style.left) > (bounds.right - bounds.x - pWidth)) {
+        s.speedX *= -1;
+
+      } else if (parseInt(p.style.left) < bounds.left - bounds.x) {
+        s.speedX *= -1;
+      }
+
+      if (parseInt(p.style.top) > bounds.bottom - bounds.y - pHeight) {
+        s.speedY *= -1;
+
+      } else if (parseInt(p.style.top) < bounds.top - bounds.y) {
+        s.speedY *= -1;
+      }
     }
 
     function createParticles() {
-
       let particleDiv = document.createElement("div")
       particleDiv.classList.add("TEAM_A_ANI_A_particle");
       document.querySelector("#ani_canvA_A").appendChild(particleDiv);
-      let prtcl = {
-        prtclDiv: particleDiv,
-        x: particleDiv.style.left,
-        y: particleDiv.style.top,
-        velX: 1,
-        velY: 1,
-        dirX: Math.floor(Math.random() * prtDir.length),
-        dirY: Math.floor(Math.random() * prtDir.length)
-      }
       return particleDiv;
     }
   }
