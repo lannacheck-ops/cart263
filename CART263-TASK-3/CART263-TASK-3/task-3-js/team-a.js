@@ -187,6 +187,86 @@ function setup_A() {
    * Do not change any code above or the HTML markup.
    * **/
   function aniD(parentCanvas) {
+    let numOfDots = 80;
+    let heart = {
+      size: 100,
+      growthRate: 1,
+      minSize: 30,
+      maxSize: 100,
+      growing: false,
+      colorFactor: 2,
+      g: 24,
+      b: 101
+    }
+    //let heartSize = 100;
+    let newHeartParticles = [];
+
+
+    let canvasBounds = parentCanvas.getBoundingClientRect();
     console.log("in ani-D -teamA");
+
+    window.requestAnimationFrame(animate);
+
+    function animate() {
+      moveHeart();
+      // for (let i = 0; i < numOfDots; i++) {
+      //   let angle = 360 / numOfDots * i
+      //   let x = ((Math.sqrt(2) * Math.pow(Math.sin(angle), 3)) * heart.size) + canvasBounds.width / 2 - heart.size / 10
+      //   let y = ((Math.pow(-Math.cos(angle), 3) - (Math.pow(Math.cos(angle), 2)) + 2 * Math.cos(angle)) * -heart.size) + canvasBounds.height / 2 - heart.size / 2
+      //   newHeartParticles.push(createHeartParticles());
+      //   newHeartParticles[i].style.left = x + "px"
+      //   newHeartParticles[i].style.top = y + "px"
+      //   // console.log(newHeartParticles[i].style.left)
+      //   // console.log(heart.size)
+      // }
+      // for (let i = 0; i < newHeartParticles.length; i++) {
+      //   moveHeart(newHeartParticles[i]);
+      // }
+      for (let i = 0; i < numOfDots; i++) {
+        let angle = 360 / numOfDots * i
+        let x = ((Math.sqrt(2) * Math.pow(Math.sin(angle), 3)) * heart.size) + canvasBounds.width / 2 - heart.size / 10
+        let y = ((Math.pow(-Math.cos(angle), 3) - (Math.pow(Math.cos(angle), 2)) + 2 * Math.cos(angle)) * -heart.size) + canvasBounds.height / 2 - heart.size / 2
+        newHeartParticles[i].style.left = x + "px"
+        newHeartParticles[i].style.top = y + "px"
+        newHeartParticles[i].style.background = `rgb(235,${heart.g},${heart.b})`
+      }
+      window.requestAnimationFrame(animate);
+    }
+    for (let i = 0; i < numOfDots; i++) {
+      let angle = 360 / numOfDots * i
+      let x = ((Math.sqrt(2) * Math.pow(Math.sin(angle), 3)) * heart.size) + canvasBounds.width / 2 - heart.size / 10
+      let y = ((Math.pow(-Math.cos(angle), 3) - (Math.pow(Math.cos(angle), 2)) + 2 * Math.cos(angle)) * -heart.size) + canvasBounds.height / 2 - heart.size / 2
+      newHeartParticles.push(createHeartParticles());
+      newHeartParticles[i].style.left = x + "px"
+      newHeartParticles[i].style.top = y + "px"
+      // console.log(newHeartParticles[i].style.left)
+      // console.log(heart.size)
+    }
+
+    function moveHeart() {
+      if (heart.size >= heart.maxSize) {
+        heart.growing = false;
+      }
+      if (heart.size <= heart.minSize) {
+        heart.growing = true;
+      }
+      if (!heart.growing) {
+        heart.size -= heart.growthRate;
+        heart.g += heart.colorFactor;
+        heart.b += heart.colorFactor;
+      }
+      if (heart.growing) {
+        heart.size += heart.growthRate;
+        heart.g -= heart.colorFactor;
+        heart.b -= heart.colorFactor;
+      }
+    }
+    function createHeartParticles() {
+      let particleDiv = document.createElement("div")
+      particleDiv.classList.add("TEAM_A_ANI_A_heartPoint");
+      parentCanvas.appendChild(particleDiv);
+      return particleDiv;
+    }
+
   }
 }
