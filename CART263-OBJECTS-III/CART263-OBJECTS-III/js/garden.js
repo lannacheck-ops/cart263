@@ -1,6 +1,10 @@
 window.onload = function () {
   // Our garden
   let garden = {
+    // An array to store the individual birds
+    birds: [],
+    // How many birds in the garden
+    numBirds: 10,
     numDogs: 10,
     dogs: [],
     /*grass object */
@@ -58,6 +62,15 @@ window.onload = function () {
     }
 
   }
+  function createBirds() {
+    //create some birds
+    for (let i = 0; i < garden.numBirds; i++) {
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * 100;
+      let bird = new Bird(x, y, 15, 15);
+      garden.birds.push(bird);
+    }
+  }
 
   function renderAnimals() {
     // Go through all the animals and move, wrap, and display them
@@ -65,10 +78,16 @@ window.onload = function () {
       let dog = garden.dogs[i];
       dog.renderAnimal();
     }
+    // Go through all the birds and move, wrap, and display them
+    for (let i = 0; i < garden.birds.length; i++) {
+      let bird = garden.birds[i];
+      bird.renderAnimal();
+    }
   }
 
   createAndRenderTheGarden();
   createDogs();
+  createBirds();
   renderAnimals();
 
   window.requestAnimationFrame(updateGarden);
@@ -79,6 +98,13 @@ window.onload = function () {
       let dog = garden.dogs[i];
       dog.move();
       dog.wrap();
+
+    }
+    // Go through all the birds and move, wrap, and display them
+    for (let i = 0; i < garden.birds.length; i++) {
+      let bird = garden.birds[i];
+      bird.move();
+      bird.wrap();
     }
     window.requestAnimationFrame(updateGarden);
   }
