@@ -1,6 +1,8 @@
-window.onload = function (){
-// Our garden
-let garden = {
+window.onload = function () {
+  // Our garden
+  let garden = {
+    numDogs: 10,
+    dogs: [],
     /*grass object */
     grass: {
       // The color of the grass (background)
@@ -12,7 +14,7 @@ let garden = {
       //the grass element
       grassDiv: document.createElement("div"),
     },
- 
+
     /*sky object */
     sky: {
       // The color of the sky (background)
@@ -26,7 +28,7 @@ let garden = {
     },
   };
   // new  sun instancce
-  let sun =  new Sun(10,10,{r: 240, g: 206,b: 83})
+  let sun = new Sun(10, 10, { r: 240, g: 206, b: 83 })
 
   function createAndRenderTheGarden() {
     /* note how we use dot notation....*/
@@ -42,10 +44,43 @@ let garden = {
     garden.grass.grassDiv.style.background = `rgb(${garden.grass.grassColor.r},${garden.grass.grassColor.g},${garden.grass.grassColor.b})`;
     document.getElementsByTagName("main")[0].appendChild(garden.grass.grassDiv);
 
-    
+
 
   }
+
+  function createDogs() {
+    // Create the correct number of dogs and put them in our array
+    for (let i = 0; i < garden.numDogs; i++) {
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * 100;
+      let dog = new Dog(x, y, 15, 15); // the constructor of the dog class is called once the key word "new" is called.
+      garden.dogs.push(dog);
+    }
+
+  }
+
+  function renderAnimals() {
+    // Go through all the animals and move, wrap, and display them
+    for (let i = 0; i < garden.dogs.length; i++) {
+      let dog = garden.dogs[i];
+      dog.renderAnimal();
+    }
+  }
+
   createAndRenderTheGarden();
+  createDogs();
+  renderAnimals();
+
+  window.requestAnimationFrame(updateGarden);
+
+  function updateGarden() {
+    // Go through all the animals and move, wrap, and display them
+    for (let i = 0; i < garden.dogs.length; i++) {
+      let dog = garden.dogs[i];
+      dog.move();
+      dog.wrap();
+    }
+    window.requestAnimationFrame(updateGarden);
+  }
 }
 
-  
