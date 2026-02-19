@@ -32,5 +32,11 @@ class Animal {
     renderAnimal() {
         // We will leave this empty because we don't display a generic
         // animal! Instead, we leave this up to the subclasses.
+        this.animalBody.classList.add("animal");
+        this.animalBody.style.width = this.width + "px";
+        this.animalBody.style.height = this.height + "px";
+        this.animalBody.style.left = this.x + "px";
+        this.animalBody.style.top = this.y + "px";
+        this.animalBody.style.borderRadius = this.width + "px";
     }
 }
