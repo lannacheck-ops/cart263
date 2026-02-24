@@ -1,6 +1,7 @@
 window.onload = function () {
   // Our garden
   let garden = {
+    // Bee hive array
     beeHive: [],
     // An array to store the individual flowers
     flowers: [],
@@ -71,15 +72,28 @@ window.onload = function () {
       garden.flowers[i].renderFlower();
     }
   }
-
+  /**
+   * Create bee hive object
+   */
   function createBeeHives() {
     for (let i = 0; i < 2; i++) {
-      let x = i * 400;
+      // Sets the bee hive variables 
+      let width = 150;
+      let height = 150;
+      let x = i * (window.innerWidth - width);
       let y = 80;
-      let beeHive = new Beehive(x, y);
+
+      // Create new hive class object
+      let beeHive = new Beehive(x, y, width, height);
       garden.beeHive.push(beeHive);
     }
+    // Tried to flip the image but it didnt work :(
+    garden.beeHive[1].hiveDiv.style.transform = "scaleX(-1)";
+    console.log(garden.beeHive[1].hiveDiv.style.transform);
   }
+  /**
+   * Render bee hive on the screen
+   */
   function renderBeeHives() {
     for (let i = 0; i < garden.beeHive.length; i++) {
       let beeHive = garden.beeHive[i];
@@ -89,10 +103,20 @@ window.onload = function () {
 
 
   createAndRenderTheGarden();
+  // Bee Hive functions
   createBeeHives();
   renderBeeHives();
 
+  // Animating Bee Hive 
+  window.requestAnimationFrame(updateGarden);
 
+  function updateGarden() {
+    for (let i = 0; i < garden.beeHive.length; i++) {
+      let beeHive = garden.beeHive[i];
+      beeHive.move();
+    }
+    window.requestAnimationFrame(updateGarden);
+  }
 }
 
 
