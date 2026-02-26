@@ -7,6 +7,27 @@ window.onload = function () {
     let playButton = document.getElementById("play");
     let pauseButton = document.getElementById("pause");
 
+    let filterButton_blur = document.getElementById("filter_button_blur");
+    let blurInput = document.getElementById("blurnum");
+
+    let filterButton_hue = document.getElementById("filter_button_hue");
+    let hueInput = document.getElementById("huenum");
+
+    let userProvidedBlur = 0;
+    let userProvidedDeg = 0;
+
+    filterButton_blur.addEventListener("click", function () {
+        //get value from input field
+        userProvidedBlur = blurInput.value;
+        console.log(userProvidedBlur)
+    });
+
+    filterButton_hue.addEventListener("click", function () {
+        //get value from input field
+        userProvidedDeg = hueInput.value;
+        console.log(userProvidedDeg)
+    });
+
     playButton.addEventListener("click", function () {
         video.play();
     });
@@ -24,6 +45,9 @@ window.onload = function () {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.save(); //like push() in p5
         // Constantly updates the video frame 
+        context.filter = `blur(${userProvidedBlur}px)`;
+        context.filter += `hue-rotate(${userProvidedDeg}deg)`
+
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         context.fillStyle = "#FFFFFF";
         context.restore();//like pop() in p5
