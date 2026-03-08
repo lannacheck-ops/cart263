@@ -24,6 +24,9 @@ window.onload = function () {
     layout.box.src = "/images/box.png";
     document.querySelector(".layout").appendChild(layout.box);
     //electric grid
+    layout.grid.src = "images/electric-grid.png";
+    document.querySelector(".layout").appendChild(layout.grid);
+    //light
     layout.light.src = "images/light-off.png";
     document.querySelector(".layout").appendChild(layout.light);
     //dispenser
