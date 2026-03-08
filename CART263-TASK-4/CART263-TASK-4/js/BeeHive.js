@@ -14,7 +14,7 @@ class Beehive {
     }
 
     renderHive() {
-        this.hiveDiv.src = "/images/beehive.png"
+        this.hiveDiv.src = "images/beehive.png"
         this.hiveDiv.style.position = "absolute"
         this.hiveDiv.style.left = this.x + "px";
         this.hiveDiv.style.top = this.y + "px";
