@@ -17,11 +17,11 @@ window.onload = function () {
   function renderlayout() {
     // bg
     layout.background.div.classList.add("layout");
-    layout.background.image.src = "/images/background.png";
+    layout.background.image.src = "images/background.png";
     layout.background.div.appendChild(layout.background.image);
     document.getElementsByTagName("main")[0].appendChild(layout.background.div);
     //box
-    layout.box.src = "/images/box.png";
+    layout.box.src = "images/box.png";
     document.querySelector(".layout").appendChild(layout.box);
     //electric grid
     layout.grid.src = "images/electric-grid.png";
