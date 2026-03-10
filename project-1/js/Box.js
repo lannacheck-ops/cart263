@@ -21,7 +21,7 @@ window.onload = function () {
       // For the sources I'm thinking of adding them to an array so its  stored in just one variable
       offSrc: "/images/light-on.png",
       onSrc: "/images/light-on.png",
-      srcPaths: ["images/light-off.png", "/images/light-on.png"],
+      srcPaths: ["images/light-off.png", "images/light-on.png"],
       image: ""
     },
     dispenser: {
