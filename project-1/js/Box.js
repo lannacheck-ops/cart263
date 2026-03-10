@@ -2,7 +2,7 @@ window.onload = function () {
   let lightOn = false;
   let charState = "sit";
   let charIndex = 0;
-  const FADE_TIME = 400;
+  const fadeTime = 400;
   let charAnimating = false;
   let layout = {
     background: {
@@ -21,8 +21,7 @@ window.onload = function () {
       // For the sources I'm thinking of adding them to an array so its  stored in just one variable
       offSrc: "/images/light-on.png",
       onSrc: "/images/light-on.png",
-      srcPaths: ["images/light-off.png", "images/light-on.png"],
-      image: ""
+      srcPaths: ["images/light-off.png", "images/light-on.png"]
     },
     dispenser: {
       el: document.createElement("img"),
@@ -36,7 +35,7 @@ window.onload = function () {
     character: {
       el: document.createElement("img"),
       srcPaths: ["images/character-sit.png", "images/character-stand.png", "images/character-push.png", "images/character-pick.png"],
-      image: ""
+      states: ["sit", "stand", "push", "pick"]
     },
 
   };
@@ -45,11 +44,15 @@ window.onload = function () {
   console.log(notifBtnId, lightOn);
   /**
    * Checks when the notif button is clicked
+   * 
    */
   function mouseClickNotif() {
-    lightOn = !lightOn;
+    if (!charAnimating && !lightOn) {
+      lightOn = true
+    }
+    // lightOn = !lightOn;
     updateLight();
-    layout.lights.el.src = layout.lights.image;
+    // layout.lights.el.src = layout.lights.image;
     // Checks the character animation
     if (charState === "sit" && lightOn && !charAnimating) {
       charState = "stand";
@@ -62,10 +65,10 @@ window.onload = function () {
    */
   function updateLight() {
     if (lightOn) {
-      layout.lights.image = layout.lights.srcPaths[1]
+      layout.lights.el.src = layout.lights.srcPaths[1]
     }
     else {
-      layout.lights.image = layout.lights.srcPaths[0]
+      layout.lights.el.src = layout.lights.srcPaths[0]
     }
   }
   /**
@@ -82,8 +85,8 @@ window.onload = function () {
     layout.box.el.id = "box"
 
     /**
-       * LEON GOONER #1 AREA ❤️
-       */
+     * LEON GOONER #1 AREA ❤️
+     */
 
     document.querySelector(".layout").appendChild(layout.box.el);
     //electric grid 
@@ -92,11 +95,12 @@ window.onload = function () {
     document.querySelector(".layout").appendChild(layout.grid.el);
 
     // light
-    layout.lights.el.src = layout.lights.image;
+    layout.lights.el.src = layout.lights.srcPaths[0];
     layout.lights.el.id = "light"
     document.querySelector(".layout").appendChild(layout.lights.el);
     /**
      * LEON GOONER #2 AREA 😋 // I think we should leave these comments in they're so funny LMFAO PLSKDSJDJ
+     * hey silly check the chat
      */
     //dispenser
     layout.dispenser.el.src = "images/dispenser.png";
@@ -119,32 +123,51 @@ window.onload = function () {
    * Cycle through character animation
    */
   function cycleCharacter() {
-    // stop at the last state (pick)
-    if (charIndex === layout.character.srcPaths.length - 1) {
-      charState = "pick";
-      charAnimating = false;
-      return;
-    }
-    console.log(charIndex)
     // fade out
     layout.character.el.style.opacity = 0;
 
     setTimeout(() => {
       // go to next state
       charIndex++;
+      // if we reached the end (pick), go back to sit and stop and turn off the light
+      if (charIndex >= layout.character.srcPaths.length) {
+        charIndex = 0;
+        layout.character.el.src = layout.character.srcPaths[0];
+        charState = "sit";
+        char.style.opacity = 1;
+        // Remove the heart when the character goes to sit
+        dropHeartCheck(charState);
+        // Turn off the light when the character goes back to sit
+        lightOn = false;
+        updateLight();
+        charAnimating = false;
+        return;
+      }
       // change image after fade out
       layout.character.el.src = layout.character.srcPaths[charIndex];
-      const states = ["sit", "stand", "push", "pick"];
-      charState = states[charIndex];
+      charState = layout.character.states[charIndex];
+      dropHeartCheck(charState);
       // fade in
       char.style.opacity = 1;
       // continue animation
-      setTimeout(cycleCharacter, FADE_TIME);
+      setTimeout(cycleCharacter, fadeTime);
 
-    }, FADE_TIME); // same time as CSS transition
+    }, fadeTime); // same time as CSS transition
+  }
+  /**
+   * Check if the button has been pushed to drop a heart (make the heart visible or invisible)
+   */
+  function dropHeartCheck(state) {
+    if (state == "push" || state == "pick") {
+      layout.heart.el.style.display = "block";
+    }
+    else {
+      layout.heart.el.style.display = "none";
+    }
   }
 
-  updateLight()
+  dropHeartCheck(charState);
+  updateLight();
   renderlayout();
 
 
