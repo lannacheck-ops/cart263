@@ -37,8 +37,17 @@ window.onload = function () {
     },
 
   };
+  let notifBtnId = this.document.querySelector("#notify");
+  notifBtnId.addEventListener("click", mouseClickNotif);
+  console.log(notifBtnId, lightOn);
+  function mouseClickNotif() {
+    lightOn = !lightOn;
+    updateLight();
+    console.log(lightOn, layout.lights.image, layout.lights.el.src);
+    layout.lights.el.src = layout.lights.image;
+  }
   /**
-   * Changes light to On or Off
+   * Changes light image to On or Off
    */
   function updateLight() {
     if (lightOn) {
@@ -71,7 +80,7 @@ window.onload = function () {
     layout.grid.el.id = "grid"
     document.querySelector(".layout").appendChild(layout.grid.el);
 
-    // light off
+    // light
     layout.lights.el.src = layout.lights.image;
     layout.lights.el.id = "light"
     document.querySelector(".layout").appendChild(layout.lights.el);
@@ -95,6 +104,31 @@ window.onload = function () {
     layout.character.el.id = "char"
     document.querySelector(".layout").appendChild(layout.character.el);
   }
-  updateLight();
+  updateLight()
   renderlayout();
-}; // Hey chat
+
+  function changeCharacter(src) {
+    console.log("yes")
+    // fade out
+    layout.character.el.style.opacity = 0;
+
+    setTimeout(() => {
+      // change image after fade out
+      layout.character.el.src = src;
+
+      // fade in
+      layout.character.el.style.opacity = 1;
+    }, 400); // same time as CSS transition
+  }
+  window.requestAnimationFrame(updateCharState);
+  /**
+   * Update Character state and change the image source
+   */
+  function updateCharState() {
+    if (charState == "sit" && lightOn) {
+      charState = "stand"
+      changeCharacter(layout.character.srcPaths[1]);
+    }
+    window.requestAnimationFrame(updateCharState);
+  }
+};
