@@ -1,6 +1,9 @@
 window.onload = function () {
   let lightOn = false;
   let charState = "sit";
+  let charIndex = 0;
+  const FADE_TIME = 400;
+  let charAnimating = false;
   let layout = {
     background: {
       div: document.createElement("div"),
@@ -40,11 +43,19 @@ window.onload = function () {
   let notifBtnId = this.document.querySelector("#notify");
   notifBtnId.addEventListener("click", mouseClickNotif);
   console.log(notifBtnId, lightOn);
+  /**
+   * Checks when the notif button is clicked
+   */
   function mouseClickNotif() {
     lightOn = !lightOn;
     updateLight();
-    console.log(lightOn, layout.lights.image, layout.lights.el.src);
     layout.lights.el.src = layout.lights.image;
+    // Checks the character animation
+    if (charState === "sit" && lightOn && !charAnimating) {
+      charState = "stand";
+      charAnimating = true;
+      cycleCharacter();
+    }
   }
   /**
    * Changes light image to On or Off
@@ -104,31 +115,49 @@ window.onload = function () {
     layout.character.el.id = "char"
     document.querySelector(".layout").appendChild(layout.character.el);
   }
-  updateLight()
-  renderlayout();
-
-  function changeCharacter(src) {
-    console.log("yes")
+  /**
+   * Cycle through character animation
+   */
+  function cycleCharacter() {
+    // stop at the last state (pick)
+    if (charIndex === layout.character.srcPaths.length - 1) {
+      charState = "pick";
+      charAnimating = false;
+      return;
+    }
+    console.log(charIndex)
     // fade out
     layout.character.el.style.opacity = 0;
 
     setTimeout(() => {
+      // go to next state
+      charIndex++;
       // change image after fade out
-      layout.character.el.src = src;
-
+      layout.character.el.src = layout.character.srcPaths[charIndex];
+      const states = ["sit", "stand", "push", "pick"];
+      charState = states[charIndex];
       // fade in
-      layout.character.el.style.opacity = 1;
-    }, 400); // same time as CSS transition
+      char.style.opacity = 1;
+      // continue animation
+      setTimeout(cycleCharacter, FADE_TIME);
+
+    }, FADE_TIME); // same time as CSS transition
   }
-  window.requestAnimationFrame(updateCharState);
-  /**
-   * Update Character state and change the image source
-   */
-  function updateCharState() {
-    if (charState == "sit" && lightOn) {
-      charState = "stand"
-      changeCharacter(layout.character.srcPaths[1]);
-    }
-    window.requestAnimationFrame(updateCharState);
-  }
+
+  updateLight()
+  renderlayout();
+
+
+
+  // window.requestAnimationFrame(updateCharState);
+  // /**
+  //  * Update Character state and change the image source
+  //  */
+  // function updateCharState() {
+  //   if (charState == "sit" && lightOn) {
+  //     charState = "stand"
+  //     changeCharacter(layout.character.srcPaths[1]);
+  //   }
+  //   window.requestAnimationFrame(updateCharState);
+  // }
 };
