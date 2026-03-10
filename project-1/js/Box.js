@@ -5,8 +5,9 @@ window.onload = function () {
   const fadeTime = 400;
   let charAnimating = false;
   let charHearts = 0;
-
-  let charNavBox = this.document.querySelector("#charNavBox")
+  let heartVisible = false;
+  let charNavBox = this.document.querySelector("#charNavBox");
+  let heartChance = 1;
   let layout = {
     background: {
       div: document.createElement("div"),
@@ -95,10 +96,15 @@ window.onload = function () {
     layout.character.el.id = "char"
     document.querySelector(".layout").appendChild(layout.character.el);
   }
+
+  /**
+   *  ALL MOUSE CLICK EVENTS 🖱️🖱️🖱️🖱️
+   */
+
   /**
    * Sets the notif button id variable and calls the mouse click event for the notif button
    */
-  let notifBtnId = this.document.querySelector("#notify");
+  let notifBtnId = document.querySelector("#notify");
   notifBtnId.addEventListener("click", mouseClickNotif);
 
   /**
@@ -117,7 +123,15 @@ window.onload = function () {
       cycleCharacter();
     }
   }
+  let heartVariabilityInput = document.querySelector("#heartVariability");
+  heartVariabilityInput.addEventListener("click", mouseClickheartVariable);
 
+  function mouseClickheartVariable() {
+    heartChance = heartVariabilityInput.value;
+  }
+  /**
+   *  SPECIFIC EVENTS
+   */
   /**
    * Changes light image to On or Off
    */
@@ -158,6 +172,7 @@ window.onload = function () {
       // change image after fade out
       layout.character.el.src = layout.character.srcPaths[charIndex];
       charState = layout.character.states[charIndex];
+      radomizeHeartDrop(charState)
       dropHeartCheck(charState);
       // fade in
       char.style.opacity = 1;
@@ -170,18 +185,36 @@ window.onload = function () {
    * Check if the character pushed the button to drop a heart (make the heart's display visible or invisible)
    */
   function dropHeartCheck(state) {
-    if (state == "pick") {
+    if (state == "pick" && heartVisible) {
       charHearts++;
       renderCharNavBox();
     }
     if (state == "push" || state == "pick") {
-      layout.heart.el.style.display = "block";
+      if (heartVisible) {
+        layout.heart.el.style.display = "block";
+      }
     }
     else {
+      heartVisible = false;
       layout.heart.el.style.display = "none";
     }
   }
+  /**
+   * Randomize Heart Visibility when character pushes button(based on variability slider input)
+   */
+  function radomizeHeartDrop(state) {
+    if (state == "push") {
+      const randomNumber = Math.floor(Math.random() * heartChance) + 1
+      console.log(randomNumber, heartChance)
+      if (randomNumber === 1) {
+        heartVisible = true;
 
+      } else {
+        heartVisible = false;
+      }
+    }
+
+  }
   dropHeartCheck(charState);
   updateLight();
   renderlayout();
