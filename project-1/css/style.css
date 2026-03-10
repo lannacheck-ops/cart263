@@ -2,13 +2,21 @@ body {
     padding: 0;
     margin: 0;
     background-color: black;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 main {
     display: flex;
+    align-items: flex-start;
 }
 
-img {
+#leftUI {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.layout img {
     /* width: 100vw;
     height: 100vh;
     */
@@ -35,6 +43,9 @@ img {
     display: flex;
     background-color: rgb(65, 85, 92);
     justify-content: space-around;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
     /* position: relative; */
     height: 50vh;
     width: 10vw;
@@ -73,4 +84,20 @@ img {
 #char {
     opacity: 1;
     transition: opacity 0.4s ease;
+}
+
+#charNavBox {
+    display: flex;
+    background-color: rgb(65, 85, 92);
+    justify-content: space-around;
+    position: relative;
+    font-size: 150%;
+    text-align: center;
+    text-shadow: 1px 1px 1px black;
+    color: white;
+    height: 10vh;
+    width: 25vw;
+    padding: 20px;
+    margin: 30px;
+    border-radius: 10px;
 }

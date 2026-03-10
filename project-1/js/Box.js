@@ -4,6 +4,9 @@ window.onload = function () {
   let charIndex = 0;
   const fadeTime = 400;
   let charAnimating = false;
+  let charHearts = 0;
+
+  let charNavBox = this.document.querySelector("#charNavBox")
   let layout = {
     background: {
       div: document.createElement("div"),
@@ -18,7 +21,6 @@ window.onload = function () {
 
     lights: {
       el: document.createElement("img"),
-      // For the sources I'm thinking of adding them to an array so its  stored in just one variable
       offSrc: "/images/light-on.png",
       onSrc: "/images/light-on.png",
       srcPaths: ["images/light-off.png", "images/light-on.png"]
@@ -39,48 +41,22 @@ window.onload = function () {
     },
 
   };
-  let notifBtnId = this.document.querySelector("#notify");
-  notifBtnId.addEventListener("click", mouseClickNotif);
-  console.log(notifBtnId, lightOn);
   /**
-   * Checks when the notif button is clicked
-   * 
+   * Add charNavBox to the DOM
    */
-  function mouseClickNotif() {
-    if (!charAnimating && !lightOn) {
-      lightOn = true
-    }
-    // lightOn = !lightOn;
-    updateLight();
-    // layout.lights.el.src = layout.lights.image;
-    // Checks the character animation
-    if (charState === "sit" && lightOn && !charAnimating) {
-      charState = "stand";
-      charAnimating = true;
-      cycleCharacter();
-    }
+  function renderCharNavBox() {
+    charNavBox.textContent = `❤️: ${charHearts}`
   }
   /**
-   * Changes light image to On or Off
-   */
-  function updateLight() {
-    if (lightOn) {
-      layout.lights.el.src = layout.lights.srcPaths[1]
-    }
-    else {
-      layout.lights.el.src = layout.lights.srcPaths[0]
-    }
-  }
-  /**
-   * Add images to the DOM
-   */
+  * Add images to the DOM
+  */
   function renderlayout() {
     // bg
     layout.background.div.classList.add("layout");
     layout.background.image.src = "images/background.png";
     layout.background.div.appendChild(layout.background.image);
     document.getElementsByTagName("main")[0].appendChild(layout.background.div);
-    //box // right here 
+    //box 
     layout.box.el.src = "images/box.png";
     layout.box.el.id = "box"
 
@@ -120,6 +96,42 @@ window.onload = function () {
     document.querySelector(".layout").appendChild(layout.character.el);
   }
   /**
+   * Sets the notif button id variable and calls the mouse click event for the notif button
+   */
+  let notifBtnId = this.document.querySelector("#notify");
+  notifBtnId.addEventListener("click", mouseClickNotif);
+
+  /**
+   * Checks when the notif button is clicked
+   */
+  function mouseClickNotif() {
+    if (!charAnimating && !lightOn) {
+      lightOn = true
+    }
+    updateLight();
+
+    // Checks the character animation and calls the cycle charcater animation function
+    if (charState === "sit" && lightOn && !charAnimating) {
+      charState = "stand";
+      charAnimating = true;
+      cycleCharacter();
+    }
+  }
+
+  /**
+   * Changes light image to On or Off
+   */
+  function updateLight() {
+    if (lightOn) {
+      layout.lights.el.src = layout.lights.srcPaths[1]
+    }
+    else {
+      layout.lights.el.src = layout.lights.srcPaths[0]
+    }
+  }
+
+
+  /**
    * Cycle through character animation
    */
   function cycleCharacter() {
@@ -155,9 +167,13 @@ window.onload = function () {
     }, fadeTime); // same time as CSS transition
   }
   /**
-   * Check if the button has been pushed to drop a heart (make the heart visible or invisible)
+   * Check if the character pushed the button to drop a heart (make the heart's display visible or invisible)
    */
   function dropHeartCheck(state) {
+    if (state == "pick") {
+      charHearts++;
+      renderCharNavBox();
+    }
     if (state == "push" || state == "pick") {
       layout.heart.el.style.display = "block";
     }
@@ -169,18 +185,5 @@ window.onload = function () {
   dropHeartCheck(charState);
   updateLight();
   renderlayout();
-
-
-
-  // window.requestAnimationFrame(updateCharState);
-  // /**
-  //  * Update Character state and change the image source
-  //  */
-  // function updateCharState() {
-  //   if (charState == "sit" && lightOn) {
-  //     charState = "stand"
-  //     changeCharacter(layout.character.srcPaths[1]);
-  //   }
-  //   window.requestAnimationFrame(updateCharState);
-  // }
+  renderCharNavBox();
 };
