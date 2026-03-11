@@ -8,6 +8,11 @@ window.onload = function () {
   let heartVisible = false;
   let charNavBox = this.document.querySelector("#charNavBox");
   let heartChance = 1;
+  let pushHistory = [];
+  let heartHistory = [];
+
+  let pushesPerSecond = 0;
+  let heartsPerSecond = 0;
   let layout = {
     background: {
       div: document.createElement("div"),
@@ -46,7 +51,8 @@ window.onload = function () {
    * Add charNavBox to the DOM
    */
   function renderCharNavBox() {
-    charNavBox.textContent = `❤️: ${charHearts}`
+    // charNavBox.textContent = `❤️: ${charHearts} | Push/s: ${pushesPerSecond} | Hearts/s: ${heartsPerSecond}`;
+    charNavBox.innerHTML = `❤️: ${charHearts} <br> Push/s: ${pushesPerSecond} <br> Hearts/s: ${heartsPerSecond}`;
   }
   /**
   * Add images to the DOM
@@ -144,7 +150,6 @@ window.onload = function () {
     }
   }
 
-
   /**
    * Cycle through character animation
    */
@@ -172,10 +177,14 @@ window.onload = function () {
       // change image after fade out
       layout.character.el.src = layout.character.srcPaths[charIndex];
       charState = layout.character.states[charIndex];
+      // Record the time when character pushes the button
+      if (charState === "push") {
+        pushHistory.push(Date.now());
+      }
       radomizeHeartDrop(charState)
       dropHeartCheck(charState);
       // fade in
-      char.style.opacity = 1;
+      layout.character.el.style.opacity = 1;
       // continue animation
       setTimeout(cycleCharacter, fadeTime);
 
@@ -187,6 +196,7 @@ window.onload = function () {
   function dropHeartCheck(state) {
     if (state == "pick" && heartVisible) {
       charHearts++;
+      heartHistory.push(Date.now());
       renderCharNavBox();
     }
     if (state == "push" || state == "pick") {
@@ -205,7 +215,6 @@ window.onload = function () {
   function radomizeHeartDrop(state) {
     if (state == "push") {
       const randomNumber = Math.floor(Math.random() * heartChance) + 1
-      console.log(randomNumber, heartChance)
       if (randomNumber === 1) {
         heartVisible = true;
 
@@ -215,6 +224,69 @@ window.onload = function () {
     }
 
   }
+  /**
+   * Global function to calculate events per x second (pushes per  x second and heart picked up per x second)
+   */
+  function calculateRate(historyArray) {
+    const now = Date.now();
+
+    const recentEvents = historyArray.filter(t => now - t < 20 * 1000);
+
+    return recentEvents.length;
+  }
+
+  /**
+   * Update the rates of button pushes and heart pick ups
+   */
+  function updateRates() {
+    pushesPerSecond = calculateRate(pushHistory);
+    heartsPerSecond = calculateRate(heartHistory);
+    // console.log(pushesPerSecond, heartsPerSecond)
+    renderCharNavBox();
+  }
+
+  /**
+   * Update yhe rates every periodically (every 200 milliseconds)
+   */
+  setInterval(updateRates, 200);
+
+  /**
+   * Calculate incentive to make the character push the button by itself
+   */
+  function calculateIncentive() {
+
+    const heartFactor = Math.sqrt(charHearts + 1) * 8;
+
+    const uncertaintyFactor = 50 / (heartChance + 2);
+
+    const luckPenalty = 20 - (3 * heartChance);
+
+    let incentive = heartFactor + uncertaintyFactor - luckPenalty;
+    console.log(luckPenalty);
+
+    // clamp between 1 and 50
+    incentive = Math.max(1, Math.min(50, Math.round(incentive)));
+
+    return incentive;
+  }
+  /**
+   * Triggers the character animation if the character has a high incentive
+   */
+  function autonomousCheck() {
+
+    const incentive = calculateIncentive();
+    // The randomRoll makes sure the the incentive is randomize so the character doesn't always push button
+    const randomRoll = (Math.random() * 50 / heartChance + (charHearts / 1.4)) + 20 - (3 * heartChance);
+    console.log(incentive, randomRoll)
+    if (randomRoll < incentive && charState === "sit" && !charAnimating) {
+      mouseClickNotif();
+    }
+
+  }
+  /**
+   * Call autonomous check function every few seconds
+   */
+  setInterval(autonomousCheck, 1000);
   dropHeartCheck(charState);
   updateLight();
   renderlayout();
