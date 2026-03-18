@@ -96,7 +96,7 @@ main {
     line-height: 1.5em;
     text-shadow: 1px 1px 1px black;
     color: white;
-    height: 15vh;
+    height: fit-content;
     width: 25vw;
     padding: 20px;
     margin: 30px;
@@ -121,6 +121,14 @@ main {
     width: 50%;
     height: 50%;
     object-fit: contain;
+}
+
+.char-profile p {
+    color: white;
+    text-shadow: 2px 2px 2px black;
+    text-align: center;
+    justify-content: center;
+    font-size: 1.2em;
 }
 
 canvas {
