@@ -140,11 +140,9 @@ canvas {
 .var-container {
     display: inline-block;
     position: relative;
-    /* top: 220px;
-    left: -7px; */
     justify-content: space-around;
     text-align: center;
-    padding: 20px;
+    /* padding: 10px; */
     margin: auto;
     /* width: 90px; */
 }
