@@ -59,10 +59,10 @@ main {
     display: inline-block;
     border: 0;
     /* line-height: 2.5; */
-    min-height: 3em;
+    min-height: 5rem;
     width: auto;
-    padding: 0 1em;
-    font-size: 2em;
+    padding: 0 1rem;
+    font-size: 2rem;
     text-align: center;
     color: white;
     text-shadow: 1px 1px 1px black;
