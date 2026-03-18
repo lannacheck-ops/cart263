@@ -214,7 +214,7 @@ window.onload = function () {
    */
   function radomizeHeartDrop(state) {
     if (state == "push") {
-      const randomNumber = Math.floor(Math.random() * heartChance) + 1
+      const randomNumber = Math.floor(Math.random() * parseInt(heartChance)) + 1
       if (randomNumber === 1) {
         heartVisible = true;
 
@@ -257,9 +257,10 @@ window.onload = function () {
 
     const heartFactor = Math.sqrt(charHearts + 1) * 8;
 
-    const uncertaintyFactor = 50 / (heartChance + 2);
+    const uncertaintyFactor = 50 / (parseInt(heartChance) + 2);
 
-    const luckPenalty = 20 - (3 * heartChance);
+    const luckPenalty = 40 - (39 / 19) * (parseInt(heartChance) - 1);
+    // 20 + parseInt(heartChance);
 
     let incentive = heartFactor + uncertaintyFactor - luckPenalty;
     console.log(luckPenalty);
@@ -276,7 +277,7 @@ window.onload = function () {
 
     const incentive = calculateIncentive();
     // The randomRoll makes sure the the incentive is randomize so the character doesn't always push button
-    const randomRoll = (Math.random() * 50 / heartChance + (charHearts / 1.4)) + 20 - (3 * heartChance);
+    const randomRoll = (Math.random() * 50 / parseInt(heartChance) + (charHearts / 1.4)) + 50 - (3 * parseInt(heartChance));
     console.log(incentive, randomRoll)
     if (randomRoll < incentive && charState === "sit" && !charAnimating) {
       mouseClickNotif();
