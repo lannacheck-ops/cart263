@@ -47,8 +47,8 @@ main {
     gap: 20px;
     padding: 20px;
     /* position: relative; */
-    height: max-content;
-    width: auto;
+    height: auto;
+    width: 25vw;
     margin: 30px;
     border-radius: 10px;
 }
@@ -106,8 +106,6 @@ main {
 .char-profile {
     display: inline-block;
     position: relative;
-    /* top: 220px;
-    left: -7px; */
     justify-content: space-around;
     text-align: center;
     /* padding: 0.2em; */
