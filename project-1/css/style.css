@@ -47,7 +47,7 @@ main {
     gap: 20px;
     padding: 20px;
     /* position: relative; */
-    height: 60vh;
+    height: max-content;
     width: auto;
     margin: 30px;
     border-radius: 10px;
