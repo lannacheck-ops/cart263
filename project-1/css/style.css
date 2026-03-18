@@ -46,7 +46,7 @@ main {
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    /* position: relative; */
+    position: relative;
     height: auto;
     width: 25vw;
     margin: 30px;
