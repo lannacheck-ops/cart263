@@ -3,7 +3,7 @@
         "id": "0001",
         "type": "donut",
         "name": "Cake",
-        "image": "../images/donuts/donut_b.png",
+        "image": "images/donuts/donut_b.png",
         "flavours": [
             {
                 "id": "1001",
@@ -36,7 +36,7 @@
         "id": "0002",
         "type": "donut",
         "name": "Raised",
-        "image": "../images/donuts/donut_a.png",
+        "image": "images/donuts/donut_a.png",
         "flavours": [
             {
                 "id": "1001",
@@ -55,7 +55,7 @@
         "id": "0003",
         "type": "donut",
         "name": "Old Fashioned",
-        "image": "../images/donuts/donut_f.png",
+        "image": "images/donuts/donut_f.png",
         "flavours": [
             {
                 "id": "1001",
