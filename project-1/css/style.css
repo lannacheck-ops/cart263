@@ -96,7 +96,7 @@ main {
     line-height: 1.5em;
     text-shadow: 1px 1px 1px black;
     color: white;
-    height: auto;
+    height: 20vh;
     width: 25vw;
     padding: 20px;
     margin: 30px;
@@ -144,7 +144,7 @@ canvas {
     left: -7px; */
     justify-content: space-around;
     text-align: center;
-    padding: 20px;
+    /* padding: 20px; */
     margin: auto;
     /* width: 90px; */
 }
