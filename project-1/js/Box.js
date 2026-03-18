@@ -2,6 +2,12 @@ window.onload = function () {
   let lightOn = false;
   let charState = "sit";
   let charIndex = 0;
+  let charIncentive = 1;
+  let difference = undefined;
+  const canvas = document.getElementById("incentive-canvas");
+  const context = canvas.getContext('2d');
+  let frequency = 0.3;
+  let time = 0;
   const fadeTime = 400;
   let charAnimating = false;
   let charHearts = 0;
@@ -47,6 +53,7 @@ window.onload = function () {
     },
 
   };
+
   /**
    * Add charNavBox to the DOM
    */
@@ -230,7 +237,7 @@ window.onload = function () {
   function calculateRate(historyArray) {
     const now = Date.now();
 
-    const recentEvents = historyArray.filter(t => now - t < 20 * 1000);
+    const recentEvents = historyArray.filter(t => now - t < 30 * 1000);
 
     return recentEvents.length;
   }
@@ -255,18 +262,18 @@ window.onload = function () {
    */
   function calculateIncentive() {
 
-    const heartFactor = Math.sqrt(charHearts + 1) * 8;
+    const heartFactor = Math.sqrt(charHearts + 1) * 14;
 
-    const uncertaintyFactor = 50 / (parseInt(heartChance) + 2);
+    const uncertaintyFactor = 40 / (parseInt(heartChance) + 2);
 
-    const luckPenalty = 40 - (39 / 19) * (parseInt(heartChance) - 1);
+    const luckPenalty = 25 - (24 / 19) * (parseInt(heartChance) - 1);
     // 20 + parseInt(heartChance);
 
     let incentive = heartFactor + uncertaintyFactor - luckPenalty;
-    console.log(luckPenalty);
+    // console.log(luckPenalty);
 
     // clamp between 1 and 50
-    incentive = Math.max(1, Math.min(50, Math.round(incentive)));
+    incentive = Math.max(1, Math.min(50, incentive));
 
     return incentive;
   }
@@ -277,12 +284,49 @@ window.onload = function () {
 
     const incentive = calculateIncentive();
     // The randomRoll makes sure the the incentive is randomize so the character doesn't always push button
-    const randomRoll = (Math.random() * 50 / parseInt(heartChance) + (charHearts / 1.4)) + 50 - (3 * parseInt(heartChance));
-    console.log(incentive, randomRoll)
+    const randomRoll = (Math.random() * 50 / parseInt(heartChance) + (charHearts / 2)) + 50 - (3 * parseInt(heartChance));
+    if (randomRoll >= 0) {
+      difference = Math.max(0, randomRoll - incentive);
+    }
+    else {
+      difference = 0;
+    }
+
+    charIncentive = incentive;
+    console.log(incentive, randomRoll, difference)
     if (randomRoll < incentive && charState === "sit" && !charAnimating) {
       mouseClickNotif();
     }
 
+  }
+  window.requestAnimationFrame(drawIncentiveBeat);
+  /**
+   * Draw character incentive as a heartbeat
+   */
+  function drawIncentiveBeat() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.beginPath();
+    context.strokeStyle = "blue";
+    context.lineWidth = 2;
+
+    const amplitude = Math.max(2, 45 - (43 / 50) * difference);
+    console.log(amplitude)
+    for (let x = 0; x < canvas.width; x++) {
+      // const incentive = calculateIncentive();
+      // Generate base sine wave
+      frequency = 0.1 + (0.4 / 49) * (charIncentive - 1);
+      let y = amplitude * Math.sin(x * frequency + time) + 50;
+
+      if (x === 0) {
+        context.moveTo(x, y);
+      } else {
+        context.lineTo(x, y);
+      }
+    }
+
+    context.stroke();
+    time += 0.15 + (0.15 / 49) * (charIncentive - 1); // Frequency of the heartbeat
+    window.requestAnimationFrame(drawIncentiveBeat);
   }
   /**
    * Call autonomous check function every few seconds

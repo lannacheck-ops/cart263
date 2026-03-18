@@ -47,7 +47,7 @@ main {
     gap: 20px;
     padding: 20px;
     /* position: relative; */
-    height: 50vh;
+    height: 60vh;
     width: auto;
     margin: 30px;
     border-radius: 10px;
@@ -100,6 +100,32 @@ main {
     width: 25vw;
     padding: 20px;
     margin: 30px;
+    border-radius: 10px;
+}
+
+.char-profile {
+    display: inline-block;
+    position: relative;
+    /* top: 220px;
+    left: -7px; */
+    justify-content: space-around;
+    text-align: center;
+    /* padding: 0.2em; */
+    margin: auto;
+    /* width: 90px; */
+    width: fit-content;
+    height: fit-content;
+}
+
+.char-profile img {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+}
+
+canvas {
+    background: black;
+    position: relative;
     border-radius: 10px;
 }
 
