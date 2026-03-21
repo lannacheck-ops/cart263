@@ -1,6 +1,11 @@
 window.onload = getMicrophoneInput;
 
+
 async function getMicrophoneInput() {
+    // get the canvas
+    let canvas = document.getElementById("drawingCanvas");
+    //get the context
+    let context = canvas.getContext("2d");
     console.log("here we are ");
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -13,10 +18,86 @@ async function getMicrophoneInput() {
         // console.log(audioStream)
         //pass the microphone input to the web audio API
         let microphoneIn = audioContext.createMediaStreamSource(audioStream);
-        console.log(microphoneIn);
+        // console.log(microphoneIn);
+
+        const filter = audioContext.createBiquadFilter();
+        const analyser = audioContext.createAnalyser();
+        // microphone -> filter ->  analyzer->destination
+        microphoneIn.connect(filter);
+        //use the analyzer object to get some properties ....
+        filter.connect(analyser);
+        visualizeTimeAndFreq();
+        visualizeTimeAndFreq();
+
+        function visualizeTimeAndFreq() {
+            const WIDTH = 500;
+            const HEIGHT = 500;
+            //console.log(analyser);
+
+            analyser.fftSize = 1024; // fft conversion from time to frequency samples // needs to be divisible by 8
+            //console.log (analyser.frequencyBinCount) //half of fft size
+            const bufferLength = analyser.fftSize;
+            const dataArrayFreq = new Uint8Array(bufferLength); //array
+            let drawVisual = requestAnimationFrame(animateVisual);
+            function animateVisual() {
+                analyser.getByteFrequencyData(dataArrayFreq);
+                let average = 0;
+                let sum = 0;
+
+                for (let i = 0; i < frequencyData.length; i++) {
+                    sum += frequencyData[i];
+                }
+                average = sum / frequencyData.length;
+                console.log(average);
+                context.fillStyle = "#FF0000";
+                //use the average frequency
+                context.fillRect(canvas.width / 2, canvas.height / 2, average * 20, 30);
+                //clear with each frame
+                // context.fillStyle = "rgb(0 0 0)";
+                // context.fillRect(0, 0, WIDTH, HEIGHT);
+
+                // analyser.getByteFrequencyData(dataArrayFreq);
+                // for (let i = 0; i < 1; i++) {
+                //     //frequency value in that bin (more dominant will be higher)
+                //     // console.log(dataArrayFreq[i]);
+                // } 
+
+                //each bin represents a given frequency
+                //get only the first
+                // const barWidth = (WIDTH / bufferLength) * 5;
+                // let barHeight;
+                // let x2 = 0;
+                // for (let i = 0; i < bufferLength; i++) {
+                //     //frequency value in that bin (more dominant will be higher)
+                //     // console.log(dataArrayFreq[i]);
+                //     //frequency value in that bin (more dominant will be higher)
+                //     barHeight = dataArrayFreq[i];
+                //     context.fillStyle = `rgb(${barHeight + 100} 50 50)`;
+                //     context.fillRect(x2, HEIGHT - barHeight, barWidth, barHeight);
+                //     x2 += barWidth + 1;
+                // }
+                requestAnimationFrame(animateVisual);
+            }
+        }
     }
     catch (err) {
         /* handle the error */
         console.log("had an error getting the microphone");
     }
-} 
+}
+
+// function processAudio(microphoneData) {
+//     const filter = audioContext.createBiquadFilter();
+//     const analyser = audioContext.createAnalyser();
+//     // microphone -> filter ->  analyzer->destination
+//     microphoneIn.connect(filter);
+//     //use the analyzer object to get some properties ....
+//     filter.connect(analyser);
+//     visualizeTimeAndFreq(analyser);
+// }
+
+// function visualizeTimeAndFreq(analyser) {
+//     const WIDTH = 500;
+//     const HEIGHT = 500;
+//     console.log(analyser);
+// }
