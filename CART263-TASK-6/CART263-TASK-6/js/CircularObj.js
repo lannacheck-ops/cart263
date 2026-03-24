@@ -10,9 +10,12 @@ class CircularObj {
     this.startAngle = 0;
     this.endAngle = Math.PI * 2; //full rotation
     this.context = context;
+    this.circArr = [];
   }
 
   display() {
+    // console.log(this.cirArr);
+    // for (let i = 0; i < this.circArr.length; i++) {
     this.context.fillStyle = this.fill_color; // change the color we are using
     this.context.strokeStyle = this.stroke_color; // change the color we are using
     this.context.beginPath();
@@ -28,6 +31,12 @@ class CircularObj {
     this.context.lineWidth = 2; //change stroke
     this.context.closePath();
     this.context.stroke();
+    // }
+  }
+
+  addObj(objToAdd) {
+    console.log(this.circArr);
+    this.circArr.push(objToAdd);
   }
 
   update() {
