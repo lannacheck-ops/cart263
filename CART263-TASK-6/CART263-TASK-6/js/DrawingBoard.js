@@ -76,7 +76,9 @@ class DrawingBoard {
       console.log("in C")
     }
     if (this.drawingBoardId === "partD") {
-      console.log("in D")
+      for (let i = 0; i < this.objectsOnCanvas.length; i++) {
+        this.objectsOnCanvas[i].changeColor("#1f009c");
+      }
     }
   }
 
@@ -145,7 +147,7 @@ class DrawingBoard {
         this.objectsOnCanvas[i].update(freq, i)
       }
       else if (this.drawingBoardId === "partC" || this.drawingBoardId === "partD") {
-        this.objectsOnCanvas[i].update()
+        this.objectsOnCanvas[i].update(micLevel);
       }
       this.objectsOnCanvas[i].display();
     }

@@ -1,6 +1,7 @@
 window.onload = go_all_stuff;
 let analyser;
 let dataArray;
+let micLevel = 0;
 // Highlight color of the stroke of each shape
 let highlightColor = "#00ff26";
 async function go_all_stuff() {
@@ -104,6 +105,22 @@ async function go_all_stuff() {
 
             const bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
+            requestAnimationFrame(animateFrequencies);
+
+            function animateFrequencies() {
+                analyser.getByteFrequencyData(dataArray);
+
+                let average = 0;
+                let sum = 0;
+
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                average = sum / dataArray.length;
+                micLevel = average;
+                // console.log(average);
+                requestAnimationFrame(animateFrequencies);
+            }
 
         }
         catch (err) {
