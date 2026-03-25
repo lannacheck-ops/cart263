@@ -128,7 +128,7 @@ class DrawingBoard {
   }
 
   /* method to add animate objects on canvas */
-  animate(volume) {
+  animate(freq) {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     for (let i = 0; i < this.objectsOnCanvas.length; i++) {
       // console.log("animate")
@@ -142,7 +142,7 @@ class DrawingBoard {
         this.objectsOnCanvas[i].update(this.canvas.getBoundingClientRect());
       }
       else if (this.drawingBoardId === "partB") {
-        this.objectsOnCanvas[i].update(volume)
+        this.objectsOnCanvas[i].update(freq, i)
       }
       else if (this.drawingBoardId === "partC" || this.drawingBoardId === "partD") {
         this.objectsOnCanvas[i].update()

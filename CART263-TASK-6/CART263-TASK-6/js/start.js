@@ -40,7 +40,9 @@ async function go_all_stuff() {
 
     let drawingBoardB = new DrawingBoard(theCanvases[1], theContexts[1], theCanvases[1].id);
     //add a rectangular object to canvas B
-    drawingBoardB.addObj(new RectangularObj(100, 100, 50, 70, "#FF5733", "#E6E6FA", drawingBoardB.context))
+    drawingBoardB.addObj(new RectangularObj(50, 200, 50, 70, "#FF5733", "#E6E6FA", drawingBoardB.context)); // bass
+    drawingBoardB.addObj(new RectangularObj(150, 200, 50, 70, "#33FF57", "#E6E6FA", drawingBoardB.context)); // mid
+    drawingBoardB.addObj(new RectangularObj(250, 200, 50, 70, "#3357FF", "#E6E6FA", drawingBoardB.context)); // treble
     drawingBoardB.display();
 
 
@@ -58,10 +60,10 @@ async function go_all_stuff() {
 
     function animationLoop() {
         /*** CALL THE EACH CANVAS TO ANIMATE INSIDE  */
-        let volume = getVolume();
+        let freq = getFrequencies();
 
         drawingBoardA.animate();
-        drawingBoardB.animate(volume);
+        drawingBoardB.animate(freq);
         drawingBoardC.animate();
         drawingBoardD.run(videoEl)
         window.requestAnimationFrame(animationLoop);
@@ -110,21 +112,45 @@ async function go_all_stuff() {
         }
     }
 
-    function getVolume() {
-        // if (!analyser || !dataArray) {
-        //     return 0;
-        // }
-        analyser.getByteFrequencyData(dataArray);
+    function getFrequencies() {
 
-        let sum = 0;
-
-        for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i];
+        if (!analyser || !dataArray) {
+            return { bass: 0, mid: 0, treble: 0 };
         }
 
-        let volume = sum / dataArray.length;
+        analyser.getByteFrequencyData(dataArray);
 
-        return volume;
+        let bass = 0;
+        let mid = 0;
+        let treble = 0;
+
+        let bassCount = 0;
+        let midCount = 0;
+        let trebleCount = 0;
+
+        for (let i = 0; i < dataArray.length; i++) {
+
+            if (i < dataArray.length * 0.2) {  // low frequencies
+                bass += dataArray[i];
+                bassCount++;
+            }
+
+            else if (i < dataArray.length * 0.6) { // mid frequencies
+                mid += dataArray[i];
+                midCount++;
+            }
+
+            else { // high frequencies
+                treble += dataArray[i];
+                trebleCount++;
+            }
+        }
+
+        return {
+            bass: bass / bassCount,
+            mid: mid / midCount,
+            treble: treble / trebleCount
+        };
     }
 
     /** TASK 1:(Drawing Board A) - 

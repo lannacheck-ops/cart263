@@ -25,10 +25,16 @@ class RectangularObj {
     this.cirArr.push(objToAdd);
   }
 
-  update(volume) {
-    if (volume !== undefined) {
-      let jumpHeight = volume * 5; // scale it
-      this.y = 200 - jumpHeight;
-    }
+  update(freq, index) {
+
+    if (!freq) return;
+
+    let jump = 0;
+
+    if (index === 0) jump = freq.bass;
+    if (index === 1) jump = freq.mid;
+    if (index === 2) jump = freq.treble;
+
+    this.y = 200 - jump * 0.8;
   }
 }
