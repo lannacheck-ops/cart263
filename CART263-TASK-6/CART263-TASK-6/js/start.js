@@ -4,7 +4,7 @@ let highlightColor = "#00ff26";
 let circArr = [];
 function go_all_stuff() {
     console.log("go");
-
+    getMicrophoneInput();
     /* for loading the video */
     let videoEl = document.getElementById("video-birds");
     window.addEventListener("click", function () {
@@ -71,6 +71,35 @@ function go_all_stuff() {
         drawingBoardD.keyDown(e);
     })
 
+    /**
+     * Get Audio Context
+     */
+    async function getMicrophoneInput() {
+
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioContext = new AudioContext(); //using the web audio library
+        try {
+            //returns a MediaStreamAudioSourceNode.
+            let audioStream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+            });
+            // console.log(audioStream)
+            //pass the microphone input to the web audio API
+            let microphoneIn = audioContext.createMediaStreamSource(audioStream);
+            // console.log(microphoneIn);
+
+            const filter = audioContext.createBiquadFilter();
+            const analyser = audioContext.createAnalyser();
+            // microphone -> filter ->  analyzer->destination
+            microphoneIn.connect(filter);
+            //use the analyzer object to get some properties ....
+            filter.connect(analyser);
+        }
+        catch (err) {
+            /* handle the error */
+            console.log("had an error getting the microphone");
+        }
+    }
     /** TASK 1:(Drawing Board A) - 
      *  1: animate the circle object(s) somehow/anyhow.. (there may be more than one)
      * You can use the mouse coordinates - the canvas ALREADY has event listeners for mouse click and mouse move
