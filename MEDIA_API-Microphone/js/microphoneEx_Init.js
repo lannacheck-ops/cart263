@@ -27,7 +27,6 @@ async function getMicrophoneInput() {
         //use the analyzer object to get some properties ....
         filter.connect(analyser);
         visualizeTimeAndFreq();
-        visualizeTimeAndFreq();
 
         function visualizeTimeAndFreq() {
             const WIDTH = 500;
@@ -44,17 +43,17 @@ async function getMicrophoneInput() {
                 let average = 0;
                 let sum = 0;
 
-                for (let i = 0; i < frequencyData.length; i++) {
-                    sum += frequencyData[i];
+                for (let i = 0; i < dataArrayFreq.length; i++) {
+                    sum += dataArrayFreq[i];
                 }
-                average = sum / frequencyData.length;
-                console.log(average);
+                average = sum / dataArrayFreq.length;
+                // console.log(average);
                 context.fillStyle = "#FF0000";
                 //use the average frequency
                 context.fillRect(canvas.width / 2, canvas.height / 2, average * 20, 30);
                 //clear with each frame
-                // context.fillStyle = "rgb(0 0 0)";
-                // context.fillRect(0, 0, WIDTH, HEIGHT);
+                context.fillStyle = "rgb(0 0 0)";
+                context.fillRect(0, 0, WIDTH, HEIGHT);
 
                 // analyser.getByteFrequencyData(dataArrayFreq);
                 // for (let i = 0; i < 1; i++) {
@@ -64,18 +63,18 @@ async function getMicrophoneInput() {
 
                 //each bin represents a given frequency
                 //get only the first
-                // const barWidth = (WIDTH / bufferLength) * 5;
-                // let barHeight;
-                // let x2 = 0;
-                // for (let i = 0; i < bufferLength; i++) {
-                //     //frequency value in that bin (more dominant will be higher)
-                //     // console.log(dataArrayFreq[i]);
-                //     //frequency value in that bin (more dominant will be higher)
-                //     barHeight = dataArrayFreq[i];
-                //     context.fillStyle = `rgb(${barHeight + 100} 50 50)`;
-                //     context.fillRect(x2, HEIGHT - barHeight, barWidth, barHeight);
-                //     x2 += barWidth + 1;
-                // }
+                const barWidth = (WIDTH / bufferLength) * 5;
+                let barHeight;
+                let x2 = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    //     //frequency value in that bin (more dominant will be higher)
+                    //     // console.log(dataArrayFreq[i]);
+                    //     //frequency value in that bin (more dominant will be higher)
+                    barHeight = dataArrayFreq[i];
+                    context.fillStyle = `rgb(${barHeight + 100} 50 50)`;
+                    context.fillRect(x2, HEIGHT - barHeight, barWidth, barHeight);
+                    x2 += barWidth + 1;
+                }
                 requestAnimationFrame(animateVisual);
             }
         }
