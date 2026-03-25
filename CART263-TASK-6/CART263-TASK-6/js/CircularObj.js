@@ -10,12 +10,13 @@ class CircularObj {
     this.startAngle = 0;
     this.endAngle = Math.PI * 2; //full rotation
     this.context = context;
-    this.circArr = [];
+    this.vX = 0;
+    this.vY = 0;
+    this.dir = [1, -1];
   }
 
   display() {
     // console.log(this.cirArr);
-    // for (let i = 0; i < this.circArr.length; i++) {
     this.context.fillStyle = this.fill_color; // change the color we are using
     this.context.strokeStyle = this.stroke_color; // change the color we are using
     this.context.beginPath();
@@ -31,13 +32,27 @@ class CircularObj {
     this.context.lineWidth = 2; //change stroke
     this.context.closePath();
     this.context.stroke();
-    // }
   }
 
+  assignSpeed() {
+    this.vX = (Math.floor(Math.random() * (3 - 1)) + 1) * this.dir[Math.floor(Math.random() * this.dir.length)];
+    this.vY = (Math.floor(Math.random() * (3 - 1)) + 1) * this.dir[Math.floor(Math.random() * this.dir.length)];
+  }
 
-  update() {
-    //update circle
-    //this.x += 1;
-    //console.log("circle update");
+  update(bounds) {
+    // console.log(bounds, (bounds.bottom - bounds.y), (bounds.right - bounds.x));
+    this.x += this.vX;
+    this.y += this.vY
+    if (this.x > (bounds.right - bounds.x - this.radius)) {
+      this.vX *= -1;
+    } else if (this.x < (bounds.left - bounds.x + this.radius)) {
+      this.vX *= -1;
+    }
+
+    if (this.y > (bounds.bottom - bounds.y - this.radius)) {
+      this.vY *= -1;
+    } else if (this.y < (bounds.top - bounds.y + this.radius)) {
+      this.vY *= -1;
+    }
   }
 }

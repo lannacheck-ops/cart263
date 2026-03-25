@@ -29,7 +29,9 @@ function go_all_stuff() {
      */
     let drawingBoardA = new DrawingBoard(theCanvases[0], theContexts[0], theCanvases[0].id);
     //add a circular object to canvas A
-    drawingBoardA.addObj(new CircularObj(100, 100, 10, "#FFC300", "#E6E6FA", drawingBoardA.context))
+    let newCirc = new CircularObj(100, 100, 10, "#FFC300", "#E6E6FA", drawingBoardA.context)
+    newCirc.assignSpeed();
+    drawingBoardA.addObj(newCirc)
     drawingBoardA.display(drawingBoardA.drawingBoardId);
 
 
