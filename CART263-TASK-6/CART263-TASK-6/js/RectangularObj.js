@@ -11,19 +11,22 @@ class RectangularObj {
     this.startAngle = 0;
     this.endAngle = Math.PI * 2; //full rotation
     this.context = context;
+    this.rectArr = [];
   }
 
   display() {
     this.context.fillStyle = this.fill_color; // change the color we are using
-    this.context.fillRect(this.x, this.y,this.width, this.height);
+    this.context.fillRect(this.x, this.y, this.width, this.height);
     this.context.strokeStyle = this.stroke_color; // change the color we are using
     this.context.lineWidth = 2; //change stroke
-    this.context.strokeRect(this.x, this.y,this.width, this.height);
+    this.context.strokeRect(this.x, this.y, this.width, this.height);
   }
-
-  update(){
+  addObj(objToAdd) {
+    this.cirArr.push(objToAdd);
+  }
+  update() {
     //update freestyle
-   // this.x+=1;
+    // this.x+=1;
     //console.log("rectangle update")
-}
+  }
 }

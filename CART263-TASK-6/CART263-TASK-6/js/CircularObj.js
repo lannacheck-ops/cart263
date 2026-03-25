@@ -34,10 +34,6 @@ class CircularObj {
     // }
   }
 
-  addObj(objToAdd) {
-    console.log(this.circArr);
-    this.circArr.push(objToAdd);
-  }
 
   update() {
     //update circle
