@@ -89,16 +89,29 @@ class DrawingBoard {
       if (e.code === "ArrowRight" && this.index < this.objectsOnCanvas.length - 1) {
         this.index += 1;
       }
-      for (let i = 0; i < this.objectsOnCanvas.length; i++) {
-        if (i === this.index) {
-          // console.log(this.index);
-          this.objectsOnCanvas[this.index].stroke_color = "#00ff26"
+      // for (let i = 0; i < this.objectsOnCanvas.length; i++) {
+      //   if (i === this.index) {
+      //     // console.log(this.index);
+      //     this.objectsOnCanvas[this.index].stroke_color = "#00ff26"
+      //   }
+      //   else {
+      //     this.objectsOnCanvas[i].stroke_color = "#E6E6FA"
+      //   }
+      // }
+      // Delete selected circle when "x" is pressed
+      if (e.keyCode === 88) {
+        this.objectsOnCanvas.splice(this.index, 1);
+        if (this.index > 0) {
+          this.index -= 1;
         }
-        else {
-          this.objectsOnCanvas[i].stroke_color = "#E6E6FA"
+        if (this.index == 0 && this.objectsOnCanvas.length > 1) {
+          this.index += 1;
+        }
+        if (this.index == 0 && this.objectsOnCanvas.length === 0) {
+          this.index = 0;
         }
       }
-
+      console.log(this.index);
     }
   }
 
@@ -119,6 +132,14 @@ class DrawingBoard {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     for (let i = 0; i < this.objectsOnCanvas.length; i++) {
       // console.log("animate")
+      if (this.drawingBoardId === "partA") {
+        if (i === this.index) {
+          this.objectsOnCanvas[this.index].stroke_color = "#00ff26"
+        }
+        else {
+          this.objectsOnCanvas[i].stroke_color = "#E6E6FA"
+        }
+      }
       this.objectsOnCanvas[i].update(this.canvas.getBoundingClientRect());
       this.objectsOnCanvas[i].display();
     }
