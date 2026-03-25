@@ -1,10 +1,12 @@
 window.onload = go_all_stuff;
+let analyser;
+let dataArray;
 // Highlight color of the stroke of each shape
 let highlightColor = "#00ff26";
-let circArr = [];
-function go_all_stuff() {
+async function go_all_stuff() {
     console.log("go");
-    getMicrophoneInput();
+    // Get Microphone input
+    await getMicrophoneInput();
     /* for loading the video */
     let videoEl = document.getElementById("video-birds");
     window.addEventListener("click", function () {
@@ -51,14 +53,15 @@ function go_all_stuff() {
     drawingBoardD.addObj(new VideoObj(0, 0, 400, 300, videoEl, drawingBoardD.context))
     drawingBoardD.display();
 
-
     /*** RUN THE ANIMATION LOOP  */
     window.requestAnimationFrame(animationLoop);
 
     function animationLoop() {
         /*** CALL THE EACH CANVAS TO ANIMATE INSIDE  */
+        let volume = getVolume();
+
         drawingBoardA.animate();
-        drawingBoardB.animate();
+        drawingBoardB.animate(volume);
         drawingBoardC.animate();
         drawingBoardD.run(videoEl)
         window.requestAnimationFrame(animationLoop);
@@ -89,17 +92,41 @@ function go_all_stuff() {
             // console.log(microphoneIn);
 
             const filter = audioContext.createBiquadFilter();
-            const analyser = audioContext.createAnalyser();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            console.log(analyser);
             // microphone -> filter ->  analyzer->destination
             microphoneIn.connect(filter);
             //use the analyzer object to get some properties ....
             filter.connect(analyser);
+
+            const bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+
         }
         catch (err) {
             /* handle the error */
             console.log("had an error getting the microphone");
         }
     }
+
+    function getVolume() {
+        // if (!analyser || !dataArray) {
+        //     return 0;
+        // }
+        analyser.getByteFrequencyData(dataArray);
+
+        let sum = 0;
+
+        for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i];
+        }
+
+        let volume = sum / dataArray.length;
+
+        return volume;
+    }
+
     /** TASK 1:(Drawing Board A) - 
      *  1: animate the circle object(s) somehow/anyhow.. (there may be more than one)
      * You can use the mouse coordinates - the canvas ALREADY has event listeners for mouse click and mouse move

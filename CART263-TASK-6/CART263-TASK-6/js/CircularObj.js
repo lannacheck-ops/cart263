@@ -39,7 +39,7 @@ class CircularObj {
     this.vY = (Math.floor(Math.random() * (3 - 1)) + 1) * this.dir[Math.floor(Math.random() * this.dir.length)];
   }
 
-  update(bounds) {
+  update(bounds, volume) {
     // console.log(bounds, (bounds.bottom - bounds.y), (bounds.right - bounds.x));
     this.x += this.vX;
     this.y += this.vY

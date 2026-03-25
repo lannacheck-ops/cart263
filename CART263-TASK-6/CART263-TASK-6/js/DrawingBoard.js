@@ -128,7 +128,7 @@ class DrawingBoard {
   }
 
   /* method to add animate objects on canvas */
-  animate() {
+  animate(volume) {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     for (let i = 0; i < this.objectsOnCanvas.length; i++) {
       // console.log("animate")
@@ -139,8 +139,14 @@ class DrawingBoard {
         else {
           this.objectsOnCanvas[i].stroke_color = "#E6E6FA"
         }
+        this.objectsOnCanvas[i].update(this.canvas.getBoundingClientRect());
       }
-      this.objectsOnCanvas[i].update(this.canvas.getBoundingClientRect());
+      else if (this.drawingBoardId === "partB") {
+        this.objectsOnCanvas[i].update(volume)
+      }
+      else if (this.drawingBoardId === "partC" || this.drawingBoardId === "partD") {
+        this.objectsOnCanvas[i].update()
+      }
       this.objectsOnCanvas[i].display();
     }
   }
