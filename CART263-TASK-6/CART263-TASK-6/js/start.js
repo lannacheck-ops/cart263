@@ -64,7 +64,12 @@ function go_all_stuff() {
         window.requestAnimationFrame(animationLoop);
     }
 
-
+    window.addEventListener("keydown", function (e) {
+        drawingBoardA.keyDown(e);
+        drawingBoardB.keyDown(e);
+        drawingBoardC.keyDown(e);
+        drawingBoardD.keyDown(e);
+    })
 
     /** TASK 1:(Drawing Board A) - 
      *  1: animate the circle object(s) somehow/anyhow.. (there may be more than one)

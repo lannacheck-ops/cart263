@@ -7,7 +7,6 @@ class DrawingBoard {
     let self = this;
     this.drawingBoardId = drawingBoardId;
     this.index = 0;
-    this.activeCanvas = "partA";
     //each element has a mouse clicked and a mouse over
     this.canvas.addEventListener("click", function (e) {
       self.clickCanvas(e);
@@ -17,9 +16,9 @@ class DrawingBoard {
       self.overCanvas(e);
     });
 
-    window.addEventListener("keydown", function (e) {
-      self.keyDown(e);
-    });
+    // window.addEventListener("keydown", function (e) {
+    //   self.keyDown(e);
+    // });
   }
 
   overCanvas(e) {
@@ -61,40 +60,45 @@ class DrawingBoard {
     //you can remove the console.logs /// 
     if (this.drawingBoardId === "partA") {
       // console.log("in A");
-      this.activeCanvas = "partA"
       let newCirc = new CircularObj(this.mouseOffsetX, this.mouseOffsetY, 10, "#FFC300", "#E6E6FA", this.context)
       newCirc.assignSpeed();
       this.addObj(newCirc)
       this.display();
-      console.log(this.objectsOnCanvas.length)
+      // console.log(this.objectsOnCanvas.length)
       // console.log(this.canvasBoundingRegion);
       // console.log(this.objectsOnCanvas);
     }
     if (this.drawingBoardId === "partB") {
       console.log("in B")
-      this.activeCanvas = "partB"
       // console.log(this.objectsOnCanvas.length)
     }
     if (this.drawingBoardId === "partC") {
       console.log("in C")
-      this.activeCanvas = "partC"
     }
     if (this.drawingBoardId === "partD") {
       console.log("in D")
-      this.activeCanvas = "partD"
     }
   }
 
   keyDown(e) {
     e.preventDefault()
-    if (this.activeCanvas === "partA") {
+    if (this.drawingBoardId === "partA") {
       if (e.code === "ArrowLeft" && this.index > 0) {
         this.index -= 1;
       }
-      if (e.code === "ArrowRight" && this.index < this.objectsOnCanvas.length) {
+      if (e.code === "ArrowRight" && this.index < this.objectsOnCanvas.length - 1) {
         this.index += 1;
       }
-      console.log(this.index, this.objectsOnCanvas.length)
+      for (let i = 0; i < this.objectsOnCanvas.length; i++) {
+        if (i === this.index) {
+          // console.log(this.index);
+          this.objectsOnCanvas[this.index].stroke_color = "#00ff26"
+        }
+        else {
+          this.objectsOnCanvas[i].stroke_color = "#E6E6FA"
+        }
+      }
+
     }
   }
 
