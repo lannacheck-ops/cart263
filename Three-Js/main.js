@@ -5,7 +5,11 @@ import * as THREE from 'three';
 //SCENE
 // stores it in scene variable
 const scene = new THREE.Scene() // object that is part of the three.js library
+const loader = new THREE.TextureLoader();
 
+const water_texture = await loader.loadAsync('textures/Ice002_1K-JPG_Color.jpg');
+//need to ensure that the textures are encoded correctly - mapping the colors correctly. makes sure it is color space of three.js
+water_texture.colorSpace = THREE.SRGBColorSpace;
 //TURN ON AXES HELPER
 //https://threejs.org/docs/?q=Axes#AxesHelper
 const axesHelper = new THREE.AxesHelper(1)
@@ -37,7 +41,11 @@ const geometry = new THREE.BoxGeometry(1, 1, 1) // parameters are width, height 
 // mesh_2.position.y = 1.25
 // mesh_2.position.z = -1 // 0,0 is in the center left is negative right is positive
 
-const material = new THREE.MeshBasicMaterial()
+const material = new THREE.MeshBasicMaterial({ map: water_texture });
+material.color = new THREE.Color('#ad86dd');
+// material.wireframe = true;
+material.transparent = true
+material.opacity = 0.5
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
@@ -56,7 +64,9 @@ const torus = new THREE.Mesh(
 )
 torus.position.x = 1.5
 
-scene.add(sphere, plane, torus)
+scene.add(sphere, plane, torus) //added multiple objects to the scene
+
+
 // Set scene size
 const sizes = {
     width: 800,
@@ -76,7 +86,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 //give it the size
 renderer.setSize(sizes.width, sizes.height)
-// Rotate the camera at the mesh 2 target position
-camera.lookAt(mesh_2.position);
+// // Rotate the camera at the mesh 2 target position
+// camera.lookAt(mesh_2.position);
 //render:
 renderer.render(scene, camera)
