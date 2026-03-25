@@ -24,9 +24,11 @@ class RectangularObj {
   addObj(objToAdd) {
     this.cirArr.push(objToAdd);
   }
-  update() {
-    //update freestyle
-    // this.x+=1;
-    //console.log("rectangle update")
+
+  update(volume) {
+    if (volume !== undefined) {
+      let jumpHeight = volume * 5; // scale it
+      this.y = 200 - jumpHeight;
+    }
   }
 }
