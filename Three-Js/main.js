@@ -41,11 +41,11 @@ axesHelper.position.y = -1;
 // mesh_2.position.y = 1.25
 // mesh_2.position.z = -1 // 0,0 is in the center left is negative right is positive
 
-const material = new THREE.MeshBasicMaterial({ map: water_texture });
-material.color = new THREE.Color('#ad86dd');
-// material.wireframe = true;
-material.transparent = true
-material.opacity = 0.5
+// const material = new THREE.MeshBasicMaterial({ map: water_texture });
+// material.color = new THREE.Color('#ad86dd');
+// // material.wireframe = true;
+// material.transparent = true
+// material.opacity = 0.5
 
 // const sphere = new THREE.Mesh(
 //     new THREE.SphereGeometry(0.5, 16, 16),
@@ -66,27 +66,31 @@ material.opacity = 0.5
 
 // scene.add(sphere, plane, torus) //added multiple objects to the scene
 
-const group = new THREE.Group()
-scene.add(group)
+// const group = new THREE.Group()
+// scene.add(group)
 
-const cube1 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
-)
-cube1.position.x = 1.5
-group.add(cube1)
-/*https://threejs.org/docs/#SphereGeometry*/
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(.75, 32, 16),
-    new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
-)
-sphere.position.y = 1.5
-sphere.position.x = 3
-group.add(sphere)
-// Shift position of the group
-group.position.x = -2
-group.rotation.x = Math.PI * .25
-group.scale.set(.5, .5, .5)
+// const cube1 = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+// )
+// cube1.position.x = 1.5
+// group.add(cube1)
+// /*https://threejs.org/docs/#SphereGeometry*/
+// const sphere = new THREE.Mesh(
+//     new THREE.SphereGeometry(.75, 32, 16),
+//     new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
+// )
+// sphere.position.y = 1.5
+// sphere.position.x = 3
+// group.add(sphere)
+// // Shift position of the group
+// group.position.x = -2
+// group.rotation.x = Math.PI * .25
+// group.scale.set(.5, .5, .5)
+const geometry = new THREE.BoxGeometry(1, 1, 1)
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const mesh = new THREE.Mesh(geometry, material)
+scene.add(mesh);
 // Set scene size
 const sizes = {
     width: 800,
@@ -109,4 +113,21 @@ renderer.setSize(sizes.width, sizes.height)
 // // Rotate the camera at the mesh 2 target position
 // camera.lookAt(mesh_2.position);
 //render:
-renderer.render(scene, camera)
+// renderer.render(scene, camera)
+window.requestAnimationFrame(animate)
+
+let elapsedTime = 0;
+function animate(timer) {
+    // Calculates timer different
+    let deltaTime = timer - elapsedTime;
+    // console.log(deltaTime)
+    elapsedTime = timer;
+    // Makes sure it has consistency across screens animations
+    mesh.rotation.y += 0.01 * deltaTime
+    renderer.render(scene, camera)
+    window.requestAnimationFrame(animate)
+    mesh.position.x = Math.cos(elapsedTime / 1000)
+    mesh.position.y = Math.sin(elapsedTime / 1000)
+    // can also animate the camera
+
+}
