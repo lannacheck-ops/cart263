@@ -19,7 +19,7 @@ axesHelper.position.x = -1;
 axesHelper.position.y = -1;
 
 //A: the geometry
-const geometry = new THREE.BoxGeometry(1, 1, 1) // parameters are width, height and depth(respectively) these are world coordinates, not pixels so you have to assign the units
+// const geometry = new THREE.BoxGeometry(1, 1, 1) // parameters are width, height and depth(respectively) these are world coordinates, not pixels so you have to assign the units
 //B: the material (applies color or texture to the geometry aka the shape)
 // const material = new THREE.MeshBasicMaterial({ color: 0x800080 })
 // //C: put together. Mesh = geometry and material combined
@@ -47,26 +47,41 @@ material.color = new THREE.Color('#ad86dd');
 material.transparent = true
 material.opacity = 0.5
 
+// const sphere = new THREE.Mesh(
+//     new THREE.SphereGeometry(0.5, 16, 16),
+//     material
+// )
+// sphere.position.x = - 1.5
+
+// const plane = new THREE.Mesh(
+//     new THREE.PlaneGeometry(1, 1),
+//     material
+// )
+
+// const torus = new THREE.Mesh(
+//     new THREE.TorusGeometry(0.5, 0.3, 16, 32),
+//     material
+// )
+// torus.position.x = 1.5
+
+// scene.add(sphere, plane, torus) //added multiple objects to the scene
+
+const group = new THREE.Group()
+scene.add(group)
+
+const cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+)
+cube1.position.x = 1.5
+group.add(cube1)
+/*https://threejs.org/docs/#SphereGeometry*/
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 16, 16),
-    material
+    new THREE.SphereGeometry(.75, 32, 16),
+    new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
 )
-sphere.position.x = - 1.5
-
-const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1, 1),
-    material
-)
-
-const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.5, 0.3, 16, 32),
-    material
-)
-torus.position.x = 1.5
-
-scene.add(sphere, plane, torus) //added multiple objects to the scene
-
-
+sphere.position.y = 1.5
+sphere.position.x = 3
 // Set scene size
 const sizes = {
     width: 800,
