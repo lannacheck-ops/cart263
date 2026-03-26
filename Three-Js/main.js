@@ -82,6 +82,11 @@ const sphere = new THREE.Mesh(
 )
 sphere.position.y = 1.5
 sphere.position.x = 3
+group.add(sphere)
+// Shift position of the group
+group.position.x = -2
+group.rotation.x = Math.PI * .25
+group.scale.set(.5, .5, .5)
 // Set scene size
 const sizes = {
     width: 800,
