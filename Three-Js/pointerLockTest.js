@@ -39,6 +39,11 @@ window.requestAnimationFrame(animate)
 
 
 function animate() {
+    if (moveForward) controls.moveForward(0.1);
+    if (moveBackward) controls.moveForward(-0.1);
+    if (moveRight) controls.moveRight(0.1);
+    if (moveLeft) controls.moveRight(-0.1);
+
     renderer.render(scene, camera)
     window.requestAnimationFrame(animate)
 }
