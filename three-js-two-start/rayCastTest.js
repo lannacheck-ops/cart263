@@ -67,22 +67,29 @@ window.requestAnimationFrame(animate);
 function animate(timer) {
     controls.update();
 
-    object1.position.y = Math.sin(timer / 1000 * .5) * 3
-    object2.position.y = Math.sin(timer / 1000 * .4) * 3
-    object3.position.y = Math.sin(timer / 1000 * .3) * 3
+    // object1.position.y = Math.sin(timer / 1000 * .5) * 3
+    // object2.position.y = Math.sin(timer / 1000 * .4) * 3
+    // object3.position.y = Math.sin(timer / 1000 * .3) * 3
 
-    const objectsToTest = [object1, object2, object3]
-    const intersects = raycaster.intersectObjects(objectsToTest)
+    // const objectsToTest = [object1, object2, object3]
+    // const intersects = raycaster.intersectObjects(objectsToTest)
 
-    for (const object of objectsToTest) {
-        object.material.color.set('#ff0000')
-    }
+    // for (const object of objectsToTest) {
+    //     object.material.color.set('#ff0000')
+    // }
 
-    for (const intersect of intersects) {
-        // When object y position is 0 it turns blue
-        intersect.object.material.color.set('#0000ff')
-    }
+    // for (const intersect of intersects) {
+    //     // When object y position is 0 it turns blue
+    //     intersect.object.material.color.set('#0000ff')
+    // }
     renderer.render(scene, camera);
 
     window.requestAnimationFrame(animate);
 }
+
+const mouse = new THREE.Vector2();
+window.addEventListener("mousemove", function (event) {
+    mouse.x = (event.clientX / sizes.width) * 2 - 1; //map to between -1,1
+    mouse.y = -(event.clientY / sizes.height) * 2 + 1; //map to between -1,1
+    // console.log(mouse);
+});
