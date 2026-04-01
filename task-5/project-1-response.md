@@ -1,34 +1,22 @@
-# Hungry Hungry Froggy
-Lanna Check
+# [space3](https://browneyegirl.github.io/explore/index.html)
 
-[View this project online](https://lannacheck-ops.github.io/cart253/art-jam/template-p5-project/)
+Space 3 is 3D map that is meant to place a spotlight on abandoned spaces around the world. Sky, Sophia and Abhi aimed to put “capitalist wastelands on a map” with Space 3, offering an alternative third space to the restricted areas by commercialization under capitalism.
 
-## Description
+Honestly everything about this project was surprising to me: the 3D render of the world map, the ability to find pinned locations of abandoned buildings on the map, the cohesive aesthetic, the seamless functionality, the particle effect of the disappearing 3D building and the images of the abandoned buildings moving around in a cylindrical form on the home page. Truly, every part of this website had something intriguing about it. I was mostly surprised at how this team achieved to make a 3D world map that highlighted pins of abandoned infrastructures in a specific area. I found myself searching for abandoned buildings near my home to further immerse myself in the project. I also love how some pins specify the building’s type and name. This detail displays how these buildings are rooted in time and space, which deepens the message Space 3 puts forward. The interactive possibilities on this project are seriously endless. I found it very fun to spray-paint on the canvas on the “About” page. It was a thoughtful and playful addition to keep users engaged. The functionality of this project is also one of its greatest assets. It is very easy to navigate through the map and site. Each button makes it clears what it does and as a user I never felt confused where to click. I believe the layout of each page also makes it easy to orient myself.
 
-A game about catching flies with your frog-tongue to avoid dying of hunger
+I talked with Sky and she told me the project used databases from the Internet to compile data of abandoned buildings around the world. Her team then used this data to locate these abandoned buildings on their 3D map. To create the map, they used the three.js library to render 3D assets and they also used the mapbox API to load the world map onto their page. This project effectively uses open access libraries and APIs to achieve the functionality they were aiming for. 
 
-### Controls
-> - Click anywhere on the screen to launch the frog's tongue to eat flies
-> - Click on the screen to catch potions
-> - Press P to use potions to increase the frog's tongue size for 5 seconds
+# [You Are Being Optimized ](https://namikoko.github.io/project1/index.html)
 
-### Modifications
-> - Added a hungry meter that reduces over time. This hunger meter increases when the frog eats "good" flies. When the hunger meter runs out, the frog dies of hunger and the game is over.
-> - Added a hunger meter icon that smiles when the frog's hunger value is normal but when the frog's hunger is at a critical level, the icon frowns.
-> - The frog's eyes follows the mouse position and the hungrier the frog gets the grayer its eyes become.
-> - The frog's tongue speed and how far the tongue shoots out is affected by how hungry the frog is. For example, the hungrier the frog is, the slower its tongue shoots out and the tongue covers a shorter distance on the y axis.
-> - Made multiple flies appear on the screen at random positions with random sizes using arrays and for loops.
-> - Added different fly types. When eaten: black flies increase your hunger meter based on their size, blue flies increase your hunger meter and freezes it for 2 seconds(the seconds add up for every blue fly you eat), yellow flies are poisonous, they will decrease your hunger meter.
-> - Flies have a sine wave movement on their y axis and they have wings that flap.
-> - Added a purple potion that the frog can catch with its tongue. When acquired, the frog can press P to activate the potion which increases the frog's tongue size, sets the frog's tongue speed to 20 and makes the frog's tongue reach the top of the screen for 5 seconds. Activating the potion makes the frog turn purple but the color fades back to the frog's original color as the potion's effects run out.
-> - The score system records how many flies the frog has eaten.
+You Are Being Optimized is an interactive website that “critiques contemporary systems of data extraction, biometric inference, targeted advertising, and algorithmic conditioning.” It does so by separating the interactive experience into 4 levels that highlight different ways in each users’ data is being extracted and used against them.
 
-### New Functions Used
-> - lerpColor()
-## Screenshot(s)
-> ![Image of the Hungry Hungry Froggy Start Screen](assets/images/startscreeen.png)
-> ![Image of the Hungry Hungry Froggy Tutorial Screen](assets/images/tutorial1.png)
-> ![Image of the Hungry Hungry Froggy Game Begin Screen](assets/images/gamebegin.png)
-> ![Image of the Hungry Hungry Froggy Game Screen](assets/images/gamescreen.png)
-> ![Image of the Hungry Hungry Froggy Low Health Screen](assets/images/lowhealth.png)
-> ![Image of the Hungry Hungry Froggy Game Over Screen](assets/images/gameover.png)
+This project’s aesthetic is honestly one of the best I have seen. The visuals and sound blend so beautifully to heighten the interactive experience. Right on the start page of the project, I was able to interact with the background text that said “calibration.” Frankly, I spent quite some time playing with the text on the home screen since the animations and visuals were so satisfying and smooth. I found it interesting how the buttons or text to click on the first level were styled in a unique way. The animations of the text “buttons” felt organic, but the minimalist aesthetic of the page made the overall atmosphere unsettling. I loved how the webcam turned my image into ASCII. It felt very eerie because it felt like my existence was being reduced to numbers and symbols that only the system understood. Level 3 stressed me out A LOT. I think this level does a great job at displaying how distracting and overwhelming digital platforms are nowadays. The glitchy sound effect emphasizes the disruption ads cause when we try to focus on a task. The contrast between the beige background of the crossword puzzle and black and red colours of the ad interruption screen was a powerful visual element that cemented the disruptive nature of ads. 
+
+Namiko’s coding style is quite advanced. I felt lost some points not knowing how each function works exactly but functions’ names made what they were meant to do obvious. To my surprise, it was through the code that I was actually able to realize that the site was recording my every move: my clicks, my mouse movements and the choices I made in previous levels. It was when I was looking at the code that I realized that all this data was being stored in a local storage that could be passed across different levels.  
+
+# [Aydan's Project](https://aydanmcgrail.github.io/cart263/Project1_aydan/)
+
+This project really caught me by surprise. It blended elements that I would’ve imagined being put together but somehow they were right there in front of me. A hand, coins and giant forks all plotting against tiny war aircrafts. The combination of these elements was not only surrealist, but it also had a hint of humour. It felt satisfying to click buttons and destroy these planes. Although the game didn’t have any explicit goal, I challenged myself to not let any aircraft get to the left side using my three powerful tools. One thing really I loved was how the hand movement wasn’t glued to the mouse position; it slid across the screen towards the mouse but not exactly. This sliding movement added a delay to the hand motion, making it more challenging to the destroy the aircrafts in time before they reached the left side. I also enjoyed seeing the forks jump each time I pressed the down arrow key. It looked comical yet very strange. The forks swaying left to right also gave the project an eerie feeling. It made the forks look alive and ready to attack at any moment! I genuinely enjoyed the game loop of this project, because it was simple yet effective. I had no problem understanding the controls and I found myself spamming different inputs at the same time to destroy all the planes efficiently. I think the surrealist aesthetic does a great job at making the visuals look weird and unsettling. I think this project was very unique visually and conceptually.
+
+Since I was very intrigued by the delayed hand movement, I quickly looked at the code to understand how this look was achieved. First, the organization of the objects and the comments made the code very easy to read and understand. After looking at Aydan’s code, I understood the hand position lerped to a target position of the mouse which is what created that delayed motion. On the “Sky.js” page, I found it clever that he made the “rectsIntersect” function separately so that he could refer back to the function with different parameters (the hand, coin and fork positions) when checking for collisions with the planes. It makes it easy to add other objects in the code and use the same function to check for collisions.
+
