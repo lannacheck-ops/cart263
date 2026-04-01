@@ -45,14 +45,14 @@ object3.updateMatrixWorld()
 // Raycast
 const raycaster = new THREE.Raycaster()
 //ray will start somewhere on left of the spheres
-const rayOrigin = new THREE.Vector3(- 3, 0, 0)
-//right (positive x) pointing to the right
-const rayDirection = new THREE.Vector3(10, 0, 0)  //reduce magnitude BUT keep direction
-console.log(rayDirection.length())
-//set direction only (has length ==1) normalizing means itll have a length of 1
-rayDirection.normalize()
-console.log(rayDirection.length())
-raycaster.set(rayOrigin, rayDirection) //raycaster has been oriented
+// const rayOrigin = new THREE.Vector3(- 3, 0, 0)
+// //right (positive x) pointing to the right
+// const rayDirection = new THREE.Vector3(10, 0, 0)  //reduce magnitude BUT keep direction
+// console.log(rayDirection.length())
+// //set direction only (has length ==1) normalizing means itll have a length of 1
+// rayDirection.normalize()
+// console.log(rayDirection.length())
+// raycaster.set(rayOrigin, rayDirection) //raycaster has been oriented
 
 //cast a ray - check intersection with ONLY object 1
 // const intersect = raycaster.intersectObject(object1)
@@ -66,22 +66,23 @@ window.requestAnimationFrame(animate);
 
 function animate(timer) {
     controls.update();
+    raycaster.setFromCamera(mouse, camera);
 
     // object1.position.y = Math.sin(timer / 1000 * .5) * 3
     // object2.position.y = Math.sin(timer / 1000 * .4) * 3
     // object3.position.y = Math.sin(timer / 1000 * .3) * 3
 
-    // const objectsToTest = [object1, object2, object3]
-    // const intersects = raycaster.intersectObjects(objectsToTest)
+    const objectsToTest = [object1, object2, object3]
+    const intersects = raycaster.intersectObjects(objectsToTest)
 
-    // for (const object of objectsToTest) {
-    //     object.material.color.set('#ff0000')
-    // }
+    for (const object of objectsToTest) {
+        object.material.color.set('#ff0000')
+    }
 
-    // for (const intersect of intersects) {
-    //     // When object y position is 0 it turns blue
-    //     intersect.object.material.color.set('#0000ff')
-    // }
+    for (const intersect of intersects) {
+        // When object y position is 0 it turns blue
+        intersect.object.material.color.set('#0000ff')
+    }
     renderer.render(scene, camera);
 
     window.requestAnimationFrame(animate);
