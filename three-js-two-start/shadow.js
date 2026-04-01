@@ -13,6 +13,19 @@ scene.add(ambientLight);
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
 directionalLight.position.set(2, 2, -1);
 scene.add(directionalLight)
+directionalLight.castShadow = true
+// Make mapSize at powers of 2 and makes shadow less pixelated
+directionalLight.shadow.mapSize.width = 1024
+directionalLight.shadow.mapSize.height = 1024
+directionalLight.shadow.radius = 10
+console.log(directionalLight.shadow)
+
+const spotLight = new THREE.SpotLight(0xff0000, 5, 10, Math.PI * 0.3)
+//new
+spotLight.castShadow = true
+spotLight.position.set(0, 2, 2)
+scene.add(spotLight)
+scene.add(spotLight.target)
 
 //Sphere and plane
 const geometry = new THREE.SphereGeometry(0.5, 32, 32);
@@ -26,6 +39,9 @@ const plane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), material);
 scene.add(plane);
 plane.rotation.x = -Math.PI * 0.5;
 plane.position.y = -0.5;
+
+sphere.castShadow = true
+plane.receiveShadow = true
 
 const sizes = {
     width: window.innerWidth,
@@ -52,7 +68,7 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
 });
 renderer.setSize(sizes.width, sizes.height);
-
+renderer.shadowMap.enabled = true
 
 //ANIMATE
 window.requestAnimationFrame(animate);
