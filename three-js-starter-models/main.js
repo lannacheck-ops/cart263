@@ -77,6 +77,8 @@ function addAndRun(loadedObjsArray) {
     let foxModel = loadedObjsArray[0].scene.children[0]
     let duckModel = loadedObjsArray[1].scene.children[0]
 
+
+
     foxModel.scale.set(.015, .015, .015)
 
     console.log(duckModel.scale)
@@ -88,6 +90,7 @@ function addAndRun(loadedObjsArray) {
     //set pos
     duckModel.position.x = 1
     foxModel.position.z = -5
+    foxModel.position.y = -0.2
 
     const mixer = new THREE.AnimationMixer(foxModel)
     // Access the second animation clip in the array
@@ -99,6 +102,10 @@ function addAndRun(loadedObjsArray) {
     scene.add(foxModel)
     scene.add(duckModel)
 
+    const spotLight = new THREE.SpotLight(0xBB76E3, 20, 10, Math.PI * 0.1, 0.25, 1)
+    spotLight.position.set(0, 2, 3)
+    scene.add(spotLight)
+    spotLight.target = duckModel
     let elapsedTime = 0;
     window.requestAnimationFrame(animate)
 
@@ -114,7 +121,7 @@ function addAndRun(loadedObjsArray) {
         }
 
         // fox model
-        foxModel.position.z += .08
+        foxModel.position.z += .05
         // Render
         renderer.render(scene, camera);
 
