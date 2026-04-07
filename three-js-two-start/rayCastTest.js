@@ -17,7 +17,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 const controls = new OrbitControls(camera, canvas)
-
+// A mesh is the shape(geometry) plus the material (color, material etc)
 const object1 = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
     new THREE.MeshBasicMaterial({ color: '#ff0000' })
