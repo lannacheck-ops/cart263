@@ -89,18 +89,31 @@ export class PlanetA {
         this.moonGroup.rotation.y += delta * 0.2;
 
         // // Play astronaut animation
-        // if (this.mixerAstronaut) {
-        //     this.mixerAstronaut.update(delta * 2);
-        // }
+        if (this.mixerAstronaut) {
+            this.mixerAstronaut.update(delta * 3);
+        }
     }
 
     click(mouse, scene, camera) {
         //TODO: Do the raycasting here.
         // Raycast
-        const raycaster = new THREE.Raycaster()
+        const raycaster = new THREE.Raycaster();
 
         raycaster.setFromCamera(mouse, camera);
-        raycaster.intersectObjects(this.astronautModel);
+
+        if (!this.astronautModel) return;
+
+        const intersects = raycaster.intersectObject(this.astronautModel, true);
+
+        if (intersects.length > 0) {
+
+            console.log("Astronaut clicked!");
+
+            if (this.astronautAction) {
+                this.astronautAction.reset();
+                this.astronautAction.play();
+            }
+        }
     }
     /**
      * Load 3D models
@@ -132,8 +145,8 @@ export class PlanetA {
         // Load the first animation clip in the astronaut file
 
         const clip = objsArray[1].animations[0];
-        const anim_action = this.mixerAstronaut.clipAction(clip);
-        anim_action.play();
+        this.astronautAction = this.mixerAstronaut.clipAction(clip);
+        // anim_action.play();
         // astronautModel.scale.set(.015, .015, .015);
 
         this.astronautModel.position.y = 1.2;
