@@ -6,6 +6,7 @@ export class PlanetA {
         this.scene = scene;
         this.orbitRadius = orbitRadius;
         this.orbitSpeed = orbitSpeed;
+        // Randomizes starting point of the planet
         this.angle = Math.random() * Math.PI * 2;
 
         //Create planet group
@@ -34,7 +35,14 @@ export class PlanetA {
         //STEP 2: 
         //TODO: Add from 1 to 3 orbiting moons to the planet group. 
         //TODO: The moons should rotate around the planet just like the planet group rotates around the Sun.
-
+        this.moonGroup = new THREE.Group();
+        this.moon1 = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32), new THREE.MeshStandardMaterial({ color: '#dfddd8' }));
+        this.moon1Angle = Math.random() * Math.PI * 2;
+        this.moon2Angle = Math.random() * Math.PI * 2;
+        this.moonOrbit1 = 2.5;
+        this.moonOrbit2 = 2;
+        this.moon2 = new THREE.Mesh(new THREE.SphereGeometry(0.2, 32, 32), new THREE.MeshStandardMaterial({ color: '#dfddd8' }));
+        this.moonGroup.add(this.moon1, this.moon2);
         //STEP 3:
         //TODO: Load Blender models to populate the planet with multiple props and critters by adding them to the planet group.
         //TODO: Make sure to rotate the models so they are oriented correctly relative to the surface of the planet.
@@ -42,7 +50,7 @@ export class PlanetA {
         //STEP 4:
         //TODO: Use raycasting in the click() method below to detect clicks on the models, and make an animation happen when a model is clicked.
         //TODO: Use your imagination and creativity!
-
+        this.group.add(this.moonGroup);
         this.scene.add(this.group);
     }
 
@@ -56,6 +64,19 @@ export class PlanetA {
         this.group.rotation.y += delta * 0.5;
 
         //TODO: Do the moon orbits and the model animations here.
+        // Moon orbit speeds
+        this.moon1Angle += delta * 2;
+        this.moon2Angle += delta * 1.5;
+
+        // Moon 1 orbit
+        this.moon1.position.x = Math.cos(this.moon1Angle) * this.moonOrbit1;
+        this.moon1.position.z = Math.sin(this.moon1Angle) * this.moonOrbit1;
+
+        // Moon 2 orbit
+        this.moon2.position.x = Math.cos(this.moon2Angle) * this.moonOrbit2;
+        this.moon2.position.z = Math.sin(this.moon2Angle) * this.moonOrbit2;
+        // Orbit around the planet
+        this.moonGroup.rotation.y += delta * 0.2;
     }
 
     click(mouse, scene, camera) {
