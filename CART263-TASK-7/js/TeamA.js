@@ -46,9 +46,11 @@ export class PlanetA {
         //STEP 3:
         //TODO: Load Blender models to populate the planet with multiple props and critters by adding them to the planet group.
         //TODO: Make sure to rotate the models so they are oriented correctly relative to the surface of the planet.
-        // 3D models
+
+        // 3D Stuff
         this.gltfFlag = null;
         this.gltfAstronaut = null;
+        this.mixerAstronaut = null;
         // Load models
         this.loadModels();
         //STEP 4:
@@ -84,12 +86,19 @@ export class PlanetA {
         this.moon2.position.z = Math.sin(this.moon2Angle) * this.moonOrbit2;
         // Orbit around the planet
         this.moonGroup.rotation.y += delta * 0.2;
+
+        // Play astronaut animation
+        if (this.mixerAstronaut) {
+            this.mixerAstronaut.update(delta * 2);
+        }
     }
 
     click(mouse, scene, camera) {
         //TODO: Do the raycasting here.
     }
-
+    /**
+     * Load 3D models
+     */
     async loadModels() {
         const gltLoader = new GLTFLoader();
         try {
@@ -112,9 +121,15 @@ export class PlanetA {
      *  Add 3D models to the planet group
      */
     addModels(objsArray) {
-        let astronautModel = objsArray[1].scene.children[0]
+        let astronautModel = objsArray[1].scene.children[0];
+        this.mixerAstronaut = new THREE.AnimationMixer(astronautModel);
+        // Load the first animation clip in the astronaut file
 
+        const clip = objsArray[1].animations[0];
+        const anim_action = this.mixerAstronaut.clipAction(clip);
+        anim_action.play();
         // astronautModel.scale.set(.015, .015, .015);
+
         astronautModel.position.y = 1.2;
         this.group.add(astronautModel);
     }
