@@ -46,16 +46,18 @@ export class PlanetA {
         //STEP 3:
         //TODO: Load Blender models to populate the planet with multiple props and critters by adding them to the planet group.
         //TODO: Make sure to rotate the models so they are oriented correctly relative to the surface of the planet.
-
+        // 3D models
+        this.gltfFlag = null;
+        this.gltfAstronaut = null;
+        // Load models
+        this.loadModels();
         //STEP 4:
         //TODO: Use raycasting in the click() method below to detect clicks on the models, and make an animation happen when a model is clicked.
         //TODO: Use your imagination and creativity!
         this.group.add(this.moonGroup);
         this.scene.add(this.group);
 
-        // 3D models
-        this.gltfFlag = null;
-        this.gltfAstronaut = null;
+
         // this.Models = this.loadModels();
     }
 
@@ -106,9 +108,14 @@ export class PlanetA {
             console.log(error.message)
         }
     }
-
+    /**
+     *  Add 3D models to the planet group
+     */
     addModels(objsArray) {
         let astronautModel = objsArray[1].scene.children[0]
+
+        // astronautModel.scale.set(.015, .015, .015);
+        this.group.add(astronautModel);
     }
 }
 
