@@ -50,6 +50,7 @@ export class PlanetA {
         // 3D Stuff
         this.gltfFlag = null;
         this.gltfAstronaut = null;
+        this.astronautModel = null;
         this.mixerAstronaut = null;
         // Load models
         this.loadModels();
@@ -87,14 +88,19 @@ export class PlanetA {
         // Orbit around the planet
         this.moonGroup.rotation.y += delta * 0.2;
 
-        // Play astronaut animation
-        if (this.mixerAstronaut) {
-            this.mixerAstronaut.update(delta * 2);
-        }
+        // // Play astronaut animation
+        // if (this.mixerAstronaut) {
+        //     this.mixerAstronaut.update(delta * 2);
+        // }
     }
 
     click(mouse, scene, camera) {
         //TODO: Do the raycasting here.
+        // Raycast
+        const raycaster = new THREE.Raycaster()
+
+        raycaster.setFromCamera(mouse, camera);
+        raycaster.intersectObjects(this.astronautModel);
     }
     /**
      * Load 3D models
@@ -121,8 +127,8 @@ export class PlanetA {
      *  Add 3D models to the planet group
      */
     addModels(objsArray) {
-        let astronautModel = objsArray[1].scene.children[0];
-        this.mixerAstronaut = new THREE.AnimationMixer(astronautModel);
+        this.astronautModel = objsArray[1].scene.children[0];
+        this.mixerAstronaut = new THREE.AnimationMixer(this.astronautModel);
         // Load the first animation clip in the astronaut file
 
         const clip = objsArray[1].animations[0];
@@ -130,8 +136,8 @@ export class PlanetA {
         anim_action.play();
         // astronautModel.scale.set(.015, .015, .015);
 
-        astronautModel.position.y = 1.2;
-        this.group.add(astronautModel);
+        this.astronautModel.position.y = 1.2;
+        this.group.add(this.astronautModel);
     }
 }
 
