@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 // Planet class for Team A
 export class PlanetA {
     constructor(scene, orbitRadius, orbitSpeed) {
@@ -52,6 +52,11 @@ export class PlanetA {
         //TODO: Use your imagination and creativity!
         this.group.add(this.moonGroup);
         this.scene.add(this.group);
+
+        // 3D models
+        this.gltfFlag = null;
+        this.gltfAstronaut = null;
+        // this.Models = this.loadModels();
     }
 
     update(delta) {
@@ -81,6 +86,29 @@ export class PlanetA {
 
     click(mouse, scene, camera) {
         //TODO: Do the raycasting here.
+    }
+
+    async loadModels() {
+        const gltLoader = new GLTFLoader();
+        try {
+            this.gltfFlag = await gltLoader.loadAsync('models/flag_in_the_wind/flag.gltf');
+            this.gltfAstronaut = await gltLoader.loadAsync('models/astronaut_with_flag/scene.gltf');
+
+            // add models to an array
+            let objs = []
+            objs.push(this.gltfFlag);
+            objs.push(this.gltfAstronaut);
+            // console.log(objs);
+            this.addModels(objs);
+            // return objs;
+        }
+        catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    addModels(objsArray) {
+        let astronautModel = objsArray[1].scene.children[0]
     }
 }
 
