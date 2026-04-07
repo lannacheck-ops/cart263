@@ -115,6 +115,7 @@ export class PlanetA {
         let astronautModel = objsArray[1].scene.children[0]
 
         // astronautModel.scale.set(.015, .015, .015);
+        astronautModel.position.y = 1.2;
         this.group.add(astronautModel);
     }
 }
