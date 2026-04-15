@@ -37,12 +37,11 @@ video.addEventListener('play', () => {
         resizedDetections.forEach(face => {
             const expressions = face.expressions;
 
-            const emotion = Object.keys(expressions).reduce((maxEmotion, currentEmotion) => {
-                return expressions[currentEmotion] > expressions[maxEmotion]
-                    ? currentEmotion
-                    : maxEmotion;
-            });
-            console.log(emotion); // "happy"
+            const [emotion, probability] = Object.entries(expressions)
+                .reduce((a, b) => (a[1] > b[1] ? a : b));
+            // Logs emotion and probability
+            console.log(emotion);
+            console.log(probability);
         })
     }, 100)
 })
