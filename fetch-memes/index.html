@@ -22,7 +22,7 @@
             const keyword = document.getElementById('keyword').value || 'funny';
 
             try {
-                const response = await fetch(`http://localhost:3000/meme?keyword=${keyword}`);
+                const response = await fetch(`https://cart263.onrender.com/meme?keyword=${keyword}`);
                 const data = await response.json();
 
                 console.log(data); // useful to see structure
