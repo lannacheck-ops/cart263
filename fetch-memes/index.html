@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Meme Generator</title>
+</head>
+
+<body>
+
+    <h1>Random Meme Generator</h1>
+
+    <input type="text" id="keyword" placeholder="Enter keyword (e.g. dog)">
+    <button onclick="getMeme()">Get Meme</button>
+
+    <br><br>
+
+    <img id="meme" width="400" />
+
+    <script>
+        async function getMeme() {
+            const keyword = document.getElementById('keyword').value || 'funny';
+
+            try {
+                const response = await fetch(`http://localhost:3000/meme?keyword=${keyword}`);
+                const data = await response.json();
+
+                console.log(data); // useful to see structure
+
+                // ⚠️ adjust this depending on API response
+                document.getElementById('meme').src = data.url;
+
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -16,8 +16,9 @@ async function goApp() {
   // }
 
   try {
-
+    // Url of cat gifs with an orange text that says hello
     let urlA = `https://cataas.com/cat/gif/says/Hello?filter=mono&fontColor=orange&fontSize=20&type=square&json=true`
+    // Url of random cat images
     let urlB = `https://cataas.com/cat?json=true`
     //
     let response = await fetch(urlB) //response
