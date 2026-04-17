@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-let numOfCats = 10;
-let catArr = [];
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+
 function random(min, max) {
     return min + Math.random() * (max - min)
 }
@@ -44,10 +44,13 @@ const hemilight = new THREE.HemisphereLight('#ffffbb', '#000020', 1);
 // hemilight.groundColor.setHSL(0.1, 0.2, 0.1);
 scene.add(hemilight);
 
-
+const directionalLight = new THREE.DirectionalLight()
+directionalLight.color = new THREE.Color(0xFFFFF)
+scene.add(directionalLight)
 
 const pointLight = new THREE.PointLight('#ffffff', 1, 100);
 pointLight.position.set(0, 10, 5);
+pointLight.distance = .75;
 scene.add(pointLight);
 
 // GROUND
@@ -64,8 +67,13 @@ scene.add(gridHelper);
 // TEXTURE LOADER
 const textureLoader = new THREE.TextureLoader();
 
+// CAT PORTRAIT CODE
+let numOfCats = 10;
+let catArr = [];
+let eyeArr = [];
 // Create and render cat portrait
 function addBox(imageUrl, angle) {
+    const group = new THREE.Group();
 
     const texture = textureLoader.load(imageUrl);
     // Cat material
@@ -74,16 +82,36 @@ function addBox(imageUrl, angle) {
         new THREE.BoxGeometry(5, 5, 0.2),
         material
     )
-    // box.position.y = 2.5;
-    box.position.setFromCylindricalCoords(numOfCats, angle, 2.5);
-    box.lookAt(0, 2, 0)
-    scene.add(box);
-    // const lookAtPosition = new THREE.Vector3(0, 2, 0);
-    // lookAtPosition.lerp(box.position, 0.3)
-    // controls.target.copy(box.position)
+    // position the whole group
+    group.position.setFromCylindricalCoords(random(numOfCats, numOfCats + 3), angle, 2.5);
+    group.lookAt(0, 2, 0);
+    // add box to group
+    group.add(box);
+
+    // EYE
+    // clone the eye 
+    // Eye wrapper 
+    const eyePivot = new THREE.Object3D();
+    const eye = eyeModel.clone();
+
+    // Scale eye
+    eye.scale.set(0.4, 0.4, 0.4);
+    // fix orientation ONCE
+    eye.rotation.y = -Math.PI; // tweak this (try +/- Math.PI/2 too) 
+    // Add eye to eye wrapper 
+    eyePivot.add(eye);
+    // position eye on top of box
+    eyePivot.position.y = 2.5
+
+    // Add eye pivot to group
+    group.add(eyePivot);
+    catArr.push(box);
+    eyeArr.push(eyePivot);
+    scene.add(group);
+
 }
 
-// Generate 10 cat images
+// Create Cat images 
 async function createImages() {
     for (let i = 0; i < numOfCats; i++) {
         let catImage = await fetchCat();
@@ -91,7 +119,31 @@ async function createImages() {
         addBox(catImage, angle);
     }
 }
-createImages();
+let eyeModel;
+// Load eye model and call for cat images
+async function init() {
+    eyeModel = await loadModels(); // load once
+    createImages(); // then create boxes
+}
+
+init();
+
+// Load models
+async function loadModels() {
+    const gltLoader = new GLTFLoader();
+    try {
+        const gltfEye = await gltLoader.loadAsync('models/mecanic_eye/scene.gltf');
+        const eyeModel = gltfEye.scene.children[0];
+        console.log(eyeModel)
+        return eyeModel;
+    }
+    catch (error) {
+        console.log(error.message)
+    }
+}
+
+// createImages();
+// Fetch cat API
 async function fetchCat() {
     console.log("hello fetch II");
     try {
@@ -115,25 +167,58 @@ async function fetchCat() {
 // Forces objects to have updated positions to check the intersection positions cuz object positions havent updated till we render them
 // box.updateMatrixWorld()
 
-// Raycast
-const raycaster = new THREE.Raycaster()
 
 
-let currentIntersectedObj = null
+
+
 
 window.requestAnimationFrame(animate);
 
 // SET CAMERA POSTION
 camera.position.z = 5;
+// RAYCAST
+const raycaster = new THREE.Raycaster();
+let currentIntersectedObj = null
 
 // ANIMATION
 function animate(timer) {
     controls.update();
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
     renderer.render(scene, camera);
+    // Check ray cast 
+    const intersects = raycaster.intersectObjects(catArr);
+    if (intersects.length > 0) {
+        const hit = intersects[0].object;
+
+        // If we are looking at a NEW object
+        if (currentIntersectedObj !== hit) {
+
+            // reset previous one
+            if (currentIntersectedObj) {
+                currentIntersectedObj.material.color.set('#ffffff');
+            }
+
+            // set new one
+            currentIntersectedObj = hit;
+            currentIntersectedObj.material.color.set('red');
+        }
+
+    } else {
+        // not looking at anything → reset last one
+        if (currentIntersectedObj) {
+            currentIntersectedObj.material.color.set('#ffffff');
+        }
+
+        currentIntersectedObj = null;
+    }
+    // EYES LOOK AT CAMERA POSITION
+    eyeArr.forEach(eye => {
+        eye.lookAt(camera.position);
+    });
 
     window.requestAnimationFrame(animate);
 }
+
 // Handle window resize
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -142,10 +227,10 @@ window.addEventListener('resize', () => {
 });
 
 const mouse = new THREE.Vector2();
+
+// Mouse move check
 window.addEventListener("mousemove", function (event) {
     mouse.x = (event.clientX / sizes.width) * 2 - 1; //map to between -1,1
     mouse.y = -(event.clientY / sizes.height) * 2 + 1; //map to between -1,1
     // console.log(mouse);
 });
-
-
