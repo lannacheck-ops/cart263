@@ -224,6 +224,10 @@ function animate(timer) {
     // eyeArr.forEach(eye => {
     //     eye.lookAt(camera.position);
     // });
+    // EYES LOOK AT MOUSE POSITION
+    eyeArr.forEach(eye => {
+        eye.lookAt(mouse3D);
+    });
 
     window.requestAnimationFrame(animate);
 }
@@ -236,17 +240,18 @@ window.addEventListener('resize', () => {
 });
 
 const mouse = new THREE.Vector2();
-
+const mouse3D = new THREE.Vector3();
 // Mouse move check
 window.addEventListener("mousemove", function (event) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1; //map to between -1,1
-    mouse.y = -(event.clientY / this.window.innerHeight) * 2 + 1; //map to between -1,1
-    // EYES LOOK AT MOUSE POSITION
-    eyeArr.forEach(eye => {
-        eye.lookAt(mouse.position);
-    });
+    // mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //  //map to between -1,1
+    // mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    //  //map to between -1,1
+    // convert to 3D space
+    mouse3D.set(mouse.x, mouse.y, 0.5); // z = 0.5 = in front of camera
+    mouse3D.unproject(camera); // convert to world space
 
-    console.log(mouse);
+    // console.log(mouse);
 });
 
 // VIDEO FACE API CAM
