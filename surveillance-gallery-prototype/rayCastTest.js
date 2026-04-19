@@ -25,12 +25,12 @@ const renderer = new THREE.WebGLRenderer({
     antialias: true,
     powerPreference: 'high-performance'
 })
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputEncoding = THREE.sRGBEncoding;
 // CONTROLS
 const controls = new OrbitControls(camera, canvas)
-controls.enableDamping = true;
+// controls.enableDamping = true;
 controls.minPolarAngle = Math.PI / 2;
 controls.maxPolarAngle = Math.PI / 2
 controls.target.y = 2;
@@ -48,10 +48,10 @@ const directionalLight = new THREE.DirectionalLight()
 directionalLight.color = new THREE.Color(0xFFFFF)
 scene.add(directionalLight)
 
-const pointLight = new THREE.PointLight('#ffffff', 1, 100);
-pointLight.position.set(0, 10, 5);
-pointLight.distance = .75;
-scene.add(pointLight);
+// const pointLight = new THREE.PointLight('#ffffff', 1, 100);
+// pointLight.position.set(0, 10, 5);
+// pointLight.distance = .75;
+// scene.add(pointLight);
 
 // GROUND
 const groundGeo = new THREE.PlaneGeometry(105, 105);
@@ -115,8 +115,12 @@ function addBox(imageUrl, angle) {
 async function createImages() {
     for (let i = 0; i < numOfCats; i++) {
         let catImage = await fetchCat();
+
         let angle = (i / numOfCats) * (Math.PI * 2) - Math.PI * 2;
         addBox(catImage, angle);
+
+        // 👇 ADD THIS LINE
+        await new Promise(resolve => setTimeout(resolve, 100));
     }
 }
 let eyeModel;
@@ -132,9 +136,9 @@ init();
 async function loadModels() {
     const gltLoader = new GLTFLoader();
     try {
-        const gltfEye = await gltLoader.loadAsync('models/mecanic_eye/scene.gltf');
+        const gltfEye = await gltLoader.loadAsync('3Dmodels/mecanic_eye/scene.gltf');
         const eyeModel = gltfEye.scene.children[0];
-        console.log(eyeModel)
+        // console.log(eyeModel)
         return eyeModel;
     }
     catch (error) {
@@ -145,7 +149,7 @@ async function loadModels() {
 // createImages();
 // Fetch cat API
 async function fetchCat() {
-    console.log("hello fetch II");
+    // console.log("hello fetch II");
     try {
         // Url of cat gifs with an orange text that says hello
         let urlA = `https://cataas.com/cat/gif/says/Hello?filter=mono&fontColor=orange&fontSize=20&type=square&json=true`
@@ -154,7 +158,7 @@ async function fetchCat() {
         //
         let response = await fetch(urlB) //response
         let cat = await response.json();
-        console.log(cat)
+        // console.log(cat)
         // displayOnSite(cat.url)
         return cat.url
 
@@ -171,7 +175,7 @@ async function fetchCat() {
 
 
 
-
+// ANIMATE SCENE
 window.requestAnimationFrame(animate);
 
 // SET CAMERA POSTION
@@ -179,11 +183,16 @@ camera.position.z = 5;
 // RAYCAST
 const raycaster = new THREE.Raycaster();
 let currentIntersectedObj = null
-
+let frame = 0;
 // ANIMATION
 function animate(timer) {
     controls.update();
-    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+    if (frame % 3 === 0) {
+        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+        // raycast here
+    }
+    frame++;
+
     renderer.render(scene, camera);
     // Check ray cast 
     const intersects = raycaster.intersectObjects(catArr);
@@ -212,9 +221,9 @@ function animate(timer) {
         currentIntersectedObj = null;
     }
     // EYES LOOK AT CAMERA POSITION
-    eyeArr.forEach(eye => {
-        eye.lookAt(camera.position);
-    });
+    // eyeArr.forEach(eye => {
+    //     eye.lookAt(camera.position);
+    // });
 
     window.requestAnimationFrame(animate);
 }
@@ -229,8 +238,67 @@ window.addEventListener('resize', () => {
 const mouse = new THREE.Vector2();
 
 // Mouse move check
-window.addEventListener("mousemove", function (event) {
-    mouse.x = (event.clientX / sizes.width) * 2 - 1; //map to between -1,1
-    mouse.y = -(event.clientY / sizes.height) * 2 + 1; //map to between -1,1
-    // console.log(mouse);
-});
+// window.addEventListener("mousemove", function (event) {
+//     mouse.x = (event.clientX / sizes.width) * 2 - 1; //map to between -1,1
+//     mouse.y = -(event.clientY / sizes.height) * 2 + 1; //map to between -1,1
+//     // console.log(mouse);
+// });
+
+// VIDEO FACE API CAM
+const video = document.getElementById('video')
+
+Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+    faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('./models')
+]).then(startVideo)
+
+function startVideo() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => video.srcObject = stream)
+        .catch(err => console.error(err));
+}
+
+video.addEventListener('play', () => {
+    const vidCanvas = faceapi.createCanvasFromMedia(video)
+    vidCanvas.id = "vidCanvas";
+    if (!document.getElementById('vidCanvas')) {
+        document.body.append(vidCanvas);
+    }
+    vidCanvas.width = video.videoWidth;
+    vidCanvas.height = video.videoHeight;
+    const displaySize = {
+        width: video.videoWidth,
+        height: video.videoHeight
+    };
+    faceapi.matchDimensions(vidCanvas, displaySize)
+    setInterval(async () => {
+        // Stores the face detections
+        // An array that stores each face that has been detected
+        if (video.readyState !== 4) return; // ✅ IMPORTANT
+
+        const detections = await faceapi
+            .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160 }))
+            .withFaceExpressions();
+        // Resizes the face detections based on the canvas size
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        // console.log(resizedDetections.face.expressions);
+        // Clear the canvas 
+        vidCanvas.getContext('2d').clearRect(0, 0, vidCanvas.width, vidCanvas.height);
+        // // Draw bounding box
+        // faceapi.draw.drawDetections(vidCanvas, resizedDetections);
+        // faceapi.draw.drawFaceLandmarks(vidCanvas, resizedDetections);
+        faceapi.draw.drawFaceExpressions(vidCanvas, resizedDetections);
+        // Trying to log the facial expressions in real time
+        resizedDetections.forEach(face => {
+            const expressions = face.expressions;
+
+            const [emotion, probability] = Object.entries(expressions)
+                .reduce((a, b) => (a[1] > b[1] ? a : b));
+            // Logs emotion and probability
+            // console.log(emotion);
+            // console.log(probability);
+        })
+    }, 500)
+})
