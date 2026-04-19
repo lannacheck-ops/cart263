@@ -187,7 +187,7 @@ let frame = 0;
 // ANIMATION
 function animate(timer) {
     controls.update();
-    if (frame % 3 === 0) {
+    if (frame % 2 === 0) {
         raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
         // raycast here
     }
@@ -209,7 +209,7 @@ function animate(timer) {
 
             // set new one
             currentIntersectedObj = hit;
-            currentIntersectedObj.material.color.set('red');
+            currentIntersectedObj.material.color.set('#e13333');
         }
 
     } else {
@@ -238,11 +238,16 @@ window.addEventListener('resize', () => {
 const mouse = new THREE.Vector2();
 
 // Mouse move check
-// window.addEventListener("mousemove", function (event) {
-//     mouse.x = (event.clientX / sizes.width) * 2 - 1; //map to between -1,1
-//     mouse.y = -(event.clientY / sizes.height) * 2 + 1; //map to between -1,1
-//     // console.log(mouse);
-// });
+window.addEventListener("mousemove", function (event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1; //map to between -1,1
+    mouse.y = -(event.clientY / this.window.innerHeight) * 2 + 1; //map to between -1,1
+    // EYES LOOK AT MOUSE POSITION
+    eyeArr.forEach(eye => {
+        eye.lookAt(mouse.position);
+    });
+
+    console.log(mouse);
+});
 
 // VIDEO FACE API CAM
 const video = document.getElementById('video')
@@ -255,11 +260,19 @@ Promise.all([
 ]).then(startVideo)
 
 function startVideo() {
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            width: { ideal: 320 },
+            height: { ideal: 240 }
+        }
+    })
         .then(stream => video.srcObject = stream)
         .catch(err => console.error(err));
 }
-
+// Show video once it has fully loaded
+video.addEventListener('loadeddata', () => {
+    video.style.opacity = 0.95;
+});
 video.addEventListener('play', () => {
     const vidCanvas = faceapi.createCanvasFromMedia(video)
     vidCanvas.id = "vidCanvas";
@@ -284,7 +297,7 @@ video.addEventListener('play', () => {
         // Resizes the face detections based on the canvas size
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
         // console.log(resizedDetections.face.expressions);
-        // Clear the canvas 
+        // Clear the canvas
         vidCanvas.getContext('2d').clearRect(0, 0, vidCanvas.width, vidCanvas.height);
         // // Draw bounding box
         // faceapi.draw.drawDetections(vidCanvas, resizedDetections);
