@@ -110,8 +110,28 @@ function addBox(imageUrl, angle) {
     scene.add(group);
 
 }
+// Call the api again to fetch new cat images
+async function resetImages() {
+    for (let i = 0; i < numOfCats; i++) {
+        let catImage = await fetchCat();
+        replaceGallery(catImage, i);
 
-// Create Cat images 
+
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    // Unlock the emotion once all the images have been reset
+    emotionLock = false;
+}
+// Replace the existing cat potraits with new images
+function replaceGallery(catImage, imageIndex) {
+    const texture = textureLoader.load(catImage);
+
+    const portrait = catArr[imageIndex];
+    portrait.material.map = texture;
+    portrait.material.needsUpdate = true;
+}
+// Create Cat images
+let imagesLoaded = false;
 async function createImages() {
     for (let i = 0; i < numOfCats; i++) {
         let catImage = await fetchCat();
@@ -119,9 +139,10 @@ async function createImages() {
         let angle = (i / numOfCats) * (Math.PI * 2) - Math.PI * 2;
         addBox(catImage, angle);
 
-        // 👇 ADD THIS LINE
+
         await new Promise(resolve => setTimeout(resolve, 100));
     }
+    imagesLoaded = true
 }
 let eyeModel;
 // Load eye model and call for cat images
@@ -207,9 +228,10 @@ let frame = 0;
 // ANIMATION
 function animate(timer) {
     controls.update();
+    // Check the every 2 frames (every frame divisible by 2)
     if (frame % 2 === 0) {
-        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
         // raycast here
+        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
     }
     frame++;
 
@@ -259,7 +281,7 @@ window.addEventListener('resize', () => {
 
 // VIDEO FACE API CAM
 const video = document.getElementById('video')
-
+let emotionLock = false;
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
     faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
@@ -320,6 +342,15 @@ video.addEventListener('play', () => {
             // Logs emotion and probability
             console.log(emotion);
             // console.log(probability);
+
+
+            // Reset the cat images if the user is surprised
+            if (emotion === "surprised" && !emotionLock && imagesLoaded) {
+                resetImages();
+                // Lock the emotion so it this function doesnt get called again until all the images have been reset
+                emotionLock = true;
+                // console.log(emotionLock)
+            }
         })
     }, 500)
 })
