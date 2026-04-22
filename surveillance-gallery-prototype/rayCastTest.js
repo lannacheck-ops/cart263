@@ -172,7 +172,27 @@ async function fetchCat() {
 // box.updateMatrixWorld()
 
 
+// TRACK MOUSE POSITION
+const mouse = new THREE.Vector2();
+const mouseTarget = new THREE.Object3D();
 
+const intersectionPoint = new THREE.Vector3();
+const planeNormal = new THREE.Vector3();
+const plane = new THREE.Plane();
+const mouseRaycaster = new THREE.Raycaster();
+// Mouse move check
+window.addEventListener("mousemove", function (event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //map to between -1,1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    //map to between -1,1
+    planeNormal.copy(camera.position).normalize()
+    plane.setFromNormalAndCoplanarPoint(planeNormal, scene.position);
+    mouseRaycaster.setFromCamera(mouse, camera);
+    mouseRaycaster.ray.intersectPlane(plane, intersectionPoint);
+    mouseTarget.position.set(intersectionPoint.x, intersectionPoint.y, 2);
+
+});
 
 
 // ANIMATE SCENE
@@ -220,13 +240,9 @@ function animate(timer) {
 
         currentIntersectedObj = null;
     }
-    // EYES LOOK AT CAMERA POSITION
-    // eyeArr.forEach(eye => {
-    //     eye.lookAt(camera.position);
-    // });
     // EYES LOOK AT MOUSE POSITION
     eyeArr.forEach(eye => {
-        eye.lookAt(mouse3D);
+        eye.lookAt(mouseTarget.position);
     });
 
     window.requestAnimationFrame(animate);
@@ -239,20 +255,7 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-const mouse = new THREE.Vector2();
-const mouse3D = new THREE.Vector3();
-// Mouse move check
-window.addEventListener("mousemove", function (event) {
-    // mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    //  //map to between -1,1
-    // mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    //  //map to between -1,1
-    // convert to 3D space
-    mouse3D.set(mouse.x, mouse.y, 0.5); // z = 0.5 = in front of camera
-    mouse3D.unproject(camera); // convert to world space
 
-    // console.log(mouse);
-});
 
 // VIDEO FACE API CAM
 const video = document.getElementById('video')
@@ -315,7 +318,7 @@ video.addEventListener('play', () => {
             const [emotion, probability] = Object.entries(expressions)
                 .reduce((a, b) => (a[1] > b[1] ? a : b));
             // Logs emotion and probability
-            // console.log(emotion);
+            console.log(emotion);
             // console.log(probability);
         })
     }, 500)
