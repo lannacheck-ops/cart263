@@ -15,3 +15,7 @@ function displayInventory() {
         parent.appendChild(image);
     });
 }
+
+document.getElementById('galleryBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
