@@ -347,6 +347,8 @@ function animate(timer) {
         if (currentIntersectedObj === hit) {
             // If the cat inventory doesnt already have this potrait and the user smiles at it add the image src to the cat inventory array
             if (currentEmotion === "happy" && !catInventory.includes(currentIntersectedObj.material.map.image.src)) {
+                // Change color to green once image is added
+                currentIntersectedObj.material.color.set('#56e133');
                 // Adds image only
                 catInventory.push(currentIntersectedObj.material.map.image.src);
                 localStorage.setItem("cats", JSON.stringify(catInventory));
