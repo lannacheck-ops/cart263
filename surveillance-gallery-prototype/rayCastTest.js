@@ -5,7 +5,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 function random(min, max) {
     return min + Math.random() * (max - min)
 }
-export let catInventory = [];
+const savedCats = JSON.parse(localStorage.getItem("cats")) || [];
+let catInventory = savedCats;
 
 const scene = new THREE.Scene()
 const sizes = {
@@ -32,6 +33,7 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 // CONTROLS
 const controls = new OrbitControls(camera, canvas)
 // controls.enableDamping = true;
+// Restricts camera angle to the flooe level
 controls.minPolarAngle = Math.PI / 2;
 controls.maxPolarAngle = Math.PI / 2
 controls.target.y = 2;
@@ -343,9 +345,11 @@ function animate(timer) {
             currentIntersectedObj.material.color.set('#e13333');
         }
         if (currentIntersectedObj === hit) {
-            // If the cat inventory doesnt already have this potrait and the user smiles at it add it to the cat inventory array
-            if (currentEmotion === "happy" && !catInventory.includes(currentIntersectedObj)) {
-                catInventory.push(currentIntersectedObj);
+            // If the cat inventory doesnt already have this potrait and the user smiles at it add the image src to the cat inventory array
+            if (currentEmotion === "happy" && !catInventory.includes(currentIntersectedObj.material.map.image.src)) {
+                // Adds image only
+                catInventory.push(currentIntersectedObj.material.map.image.src);
+                localStorage.setItem("cats", JSON.stringify(catInventory));
                 console.log(catInventory);
             }
         }
