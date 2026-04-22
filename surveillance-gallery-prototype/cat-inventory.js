@@ -7,11 +7,11 @@ displayInventory();
 // Display the inventory
 function displayInventory() {
     catInventory.forEach(cat => {
-        const imageDiv = document.createElement("div");
+        const image = document.createElement("img");
         // Add class of card to each image
-        imageDiv.classList.add("card");
+        image.classList.add("card");
         // Set image source
-        imageDiv.innerHTML += `<img src=${cat} />`
-        parent.appendChild(imageDiv);
+        image.src = cat
+        parent.appendChild(image);
     });
 }
