@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 function random(min, max) {
     return min + Math.random() * (max - min)
 }
+export let catInventory = [];
 
 const scene = new THREE.Scene()
 const sizes = {
@@ -216,59 +217,6 @@ window.addEventListener("mousemove", function (event) {
 });
 
 
-// ANIMATE SCENE
-window.requestAnimationFrame(animate);
-
-// SET CAMERA POSTION
-camera.position.z = 5;
-// RAYCAST
-const raycaster = new THREE.Raycaster();
-let currentIntersectedObj = null
-let frame = 0;
-// ANIMATION
-function animate(timer) {
-    controls.update();
-    // Check the every 2 frames (every frame divisible by 2)
-    if (frame % 2 === 0) {
-        // raycast here
-        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-    }
-    frame++;
-
-    renderer.render(scene, camera);
-    // Check ray cast 
-    const intersects = raycaster.intersectObjects(catArr);
-    if (intersects.length > 0) {
-        const hit = intersects[0].object;
-
-        // If we are looking at a NEW object
-        if (currentIntersectedObj !== hit) {
-
-            // reset previous one
-            if (currentIntersectedObj) {
-                currentIntersectedObj.material.color.set('#ffffff');
-            }
-
-            // set new one
-            currentIntersectedObj = hit;
-            currentIntersectedObj.material.color.set('#e13333');
-        }
-
-    } else {
-        // not looking at anything → reset last one
-        if (currentIntersectedObj) {
-            currentIntersectedObj.material.color.set('#ffffff');
-        }
-
-        currentIntersectedObj = null;
-    }
-    // EYES LOOK AT MOUSE POSITION
-    eyeArr.forEach(eye => {
-        eye.lookAt(mouseTarget.position);
-    });
-
-    window.requestAnimationFrame(animate);
-}
 
 // Handle window resize
 window.addEventListener('resize', () => {
@@ -282,6 +230,8 @@ window.addEventListener('resize', () => {
 // VIDEO FACE API CAM
 const video = document.getElementById('video')
 let emotionLock = false;
+let currentEmotion = null;
+let currentProbability = 0;
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
     faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
@@ -337,15 +287,15 @@ video.addEventListener('play', () => {
         resizedDetections.forEach(face => {
             const expressions = face.expressions;
 
-            const [emotion, probability] = Object.entries(expressions)
+            [currentEmotion, currentProbability] = Object.entries(expressions)
                 .reduce((a, b) => (a[1] > b[1] ? a : b));
             // Logs emotion and probability
-            console.log(emotion);
+            console.log(currentEmotion);
             // console.log(probability);
 
 
             // Reset the cat images if the user is surprised
-            if (emotion === "surprised" && !emotionLock && imagesLoaded) {
+            if (currentEmotion === "surprised" && !emotionLock && imagesLoaded) {
                 resetImages();
                 // Lock the emotion so it this function doesnt get called again until all the images have been reset
                 emotionLock = true;
@@ -354,3 +304,70 @@ video.addEventListener('play', () => {
         })
     }, 500)
 })
+
+// ANIMATE SCENE
+window.requestAnimationFrame(animate);
+
+// SET CAMERA POSTION
+camera.position.z = 5;
+// RAYCAST
+const raycaster = new THREE.Raycaster();
+let currentIntersectedObj = null
+let frame = 0;
+// ANIMATION
+function animate(timer) {
+    controls.update();
+    // Check the every 2 frames (every frame divisible by 2)
+    if (frame % 2 === 0) {
+        // raycast here
+        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+    }
+    frame++;
+
+    renderer.render(scene, camera);
+    // Check ray cast 
+    const intersects = raycaster.intersectObjects(catArr);
+    if (intersects.length > 0) {
+        const hit = intersects[0].object;
+
+        // If we are looking at a NEW object
+        if (currentIntersectedObj !== hit) {
+
+            // reset previous one
+            if (currentIntersectedObj) {
+                currentIntersectedObj.material.color.set('#ffffff');
+            }
+
+            // set new one
+            currentIntersectedObj = hit;
+            currentIntersectedObj.material.color.set('#e13333');
+        }
+        if (currentIntersectedObj === hit) {
+            // If the cat inventory doesnt already have this potrait and the user smiles at it add it to the cat inventory array
+            if (currentEmotion === "happy" && !catInventory.includes(currentIntersectedObj)) {
+                catInventory.push(currentIntersectedObj);
+                console.log(catInventory);
+            }
+        }
+    } else {
+        // not looking at anything → reset last one
+        if (currentIntersectedObj) {
+            currentIntersectedObj.material.color.set('#ffffff');
+        }
+
+        currentIntersectedObj = null;
+    }
+
+
+    // EYES LOOK AT MOUSE POSITION
+    eyeArr.forEach(eye => {
+        eye.lookAt(mouseTarget.position);
+    });
+
+    window.requestAnimationFrame(animate);
+}
+
+// Click Inventory button
+document.getElementById('inventoryBtn').addEventListener('click', () => {
+    window.location.href = 'inventory.html';
+});
