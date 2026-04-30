@@ -1,7 +1,13 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+// Delete the storage data if it is the first time vsiting the site
+if (!localStorage.getItem("hasVisited")) {
+    // First time opening the page
+    localStorage.clear(); // or remove only what you want
 
+    localStorage.setItem("hasVisited", "true");
+}
 function random(min, max) {
     return min + Math.random() * (max - min)
 }
